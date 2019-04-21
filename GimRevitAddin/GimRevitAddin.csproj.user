@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files\Autodesk\Revit 2017\Revit.exe</StartProgram>
+    <StartArguments>"C:/OneDrive/TEMP/Families/HZG/HZG_Bauteile/AWH_HZG_EBB_Erzeuger_GW.rfa" /language DEU /nosplash</StartArguments>
+    <StartWorkingDirectory>C:\Program Files\Autodesk\Revit 2017\</StartWorkingDirectory>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
+</Project>

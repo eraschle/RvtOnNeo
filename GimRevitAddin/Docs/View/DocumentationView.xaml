@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Gim.Revit.Addin.Docs.View.DocumentationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Gim.Revit.Addin.Docs.View">
+    <UserControl.DataContext>
+        <local:DocumentationViewModel/>
+    </UserControl.DataContext>
+    <Grid Margin="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="300" Width="1*"/>
+            <ColumnDefinition MinWidth="300" Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Margin="2">
+            <RadioButton x:Name="rdbJson"
+                         Content="Json" 
+                         GroupName="Output"
+                         IsChecked="{Binding IsJson}"/>
+            <GroupBox Header="Options" 
+                      IsEnabled="{Binding ElementName=rdbJson, Path=IsChecked}"
+                      HorizontalAlignment="Stretch" 
+                      VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="Format Json" 
+                              IsChecked="{Binding FormatJson}"/>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="2">
+            <RadioButton x:Name="rdbWeb"
+                         Content="Web" GroupName="Output"
+                         IsChecked="{Binding IsWeb}"/>
+            <GroupBox Header="Options" 
+                      IsEnabled="{Binding ElementName=rdbWeb, Path=IsChecked}"
+                      HorizontalAlignment="Stretch" 
+                      VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="60" Width="1*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Url" 
+                           Grid.Column="0" Grid.Row="0"
+                           HorizontalAlignment="Stretch" 
+                           VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding WebUrl}" 
+                             Grid.Column="1" Grid.Row="0" Margin="2"
+                             HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch"/>
+                    <Label Content="Api Key" 
+                           Grid.Column="0" Grid.Row="1"
+                           HorizontalAlignment="Stretch" 
+                           VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding ApiKey}" 
+                             Grid.Column="1" Grid.Row="1" Margin="2"
+                             HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch"/>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

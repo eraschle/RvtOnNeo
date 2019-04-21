@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Assembly>Gim/GimRevitAddin.dll</Assembly>
+    <ClientId>12dae19d-edec-423c-bf70-293db65e04fd</ClientId>
+    <FullClassName>Gim.Revit.Addin.Docs.DocumentationCommand</FullClassName>
+    <Text>Documentation</Text>
+    <Description>Show how an external application can participate in the journaling mechanism.</Description>
+    <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
+    <VisibilityMode>NotVisibleInProject</VisibilityMode>
+    <VendorId>RASCER</VendorId>
+    <VendorDescription>RASCER Dev</VendorDescription>
+  </AddIn>
+  <AddIn Type="Command">
+    <Assembly>Gim/GimRevitAddin.dll</Assembly>
+    <ClientId>37749B1B-4DE2-43E4-AE27-0E1953488E21</ClientId>
+    <FullClassName>Gim.Revit.Addin.Journal.CreateJournalCommand</FullClassName>
+    <Text>Create Documenation Journals</Text>
+    <Description>Creates all jounral files of all Revit files in the choosen directory.</Description>
+    <VisibilityMode>NotVisibleInProject</VisibilityMode>
+    <VisibilityMode>NotVisibleInFamily</VisibilityMode>
+    <VendorId>RASCER</VendorId>
+    <VendorDescription>RASCER Dev</VendorDescription>
+  </AddIn>
+</RevitAddIns>

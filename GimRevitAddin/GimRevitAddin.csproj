@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CF5C8AE0-F5DD-4D2E-8E34-0C6F8A06DB85}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gim.Revit.Addin</RootNamespace>
+    <AssemblyName>GimRevitAddin</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="RevitAddInUtility">
+      <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAddInUtility.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPI">
+      <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Docs\DocumentationController.cs" />
+    <Compile Include="Docs\View\DocumentationView.xaml.cs">
+      <DependentUpon>DocumentationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Docs\View\DocumentationViewModel.cs" />
+    <Compile Include="Journal\FileCreationManager.cs" />
+    <Compile Include="Journal\CreateJournalCommand.cs" />
+    <Compile Include="Docs\DocumentationCommand.cs" />
+    <Compile Include="Journal\CreateJournalManager.cs" />
+    <Compile Include="Journal\CreateJournalSetting.cs" />
+    <Compile Include="Journal\View\CreateJournalView.xaml.cs">
+      <DependentUpon>CreateJournalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Journal\View\CreateJournalViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GimRevitAddin.addin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GimDomain\GimDomain.csproj">
+      <Project>{0C05D400-C7B9-43F3-ACAE-4261AC37CD25}</Project>
+      <Name>GimDomain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GimOnRevit\GimOnRevit.csproj">
+      <Project>{3E2406FD-902E-40C9-BCD3-7C8AF821FDD2}</Project>
+      <Name>GimOnRevit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Docs\View\DocumentationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Journal\View\CreateJournalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!--   <PropertyGroup Label="DynamoPackage">
+    <AddinRoot>$(AppData)\Autodesk\REVIT\Addins\2017\</AddinRoot>
+    <AddinPath>$(AddinRoot)Gim\</AddinPath>
+  </PropertyGroup> -->
+  <!-- <Target Name="BeforeBuild"> -->
+  <!-- </Target> -->
+  <!--   <Target Name="AfterBuild">
+    <Makedir directories="$(AddinPath)" />
+    <ItemGroup>
+      <Dlls Include="$(OutDir)*.dll" />
+      <Pdbs Include="$(OutDir)*.pdb" />
+      <Xmls Include="$(OutDir)*.xml" />
+      <Addin Include="$(OutDir)*.addin" />
+    </ItemGroup>
+    <Message Text="Copying DLL to Addin: $(AddinPath)" Importance="high" />
+    <Copy SourceFiles="@(Dlls)" DestinationFolder="$(AddinPath)" />
+    <Message Text="Copying Pdbs to Addin $(AddinPath):" Importance="high" />
+    <Copy SourceFiles="@(Pdbs)" DestinationFolder="$(AddinPath)" />
+    <Message Text="Copying XMLs to Addin $(AddinPath):" Importance="high" />
+    <Copy SourceFiles="@(Xmls)" DestinationFolder="$(AddinPath)" />
+    <Message Text="Copying addin-File to Addin $(AddinPath):" Importance="high" />
+    <Copy SourceFiles="@(Addin)" DestinationFolder="$(AddinRoot)" />
+  </Target> -->
+</Project>
