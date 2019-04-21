@@ -1,8 +1,8 @@
-﻿namespace Gim.Domain.Model.Attribute
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Gim.Domain.Model.Attribute
+{
     public class GimAttributeDefinition
     {
         public virtual string DefinitionType { get; set; }

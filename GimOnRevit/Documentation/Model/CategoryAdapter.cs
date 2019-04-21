@@ -1,7 +1,8 @@
-﻿namespace Gim.Revit.Documentation.Model
+﻿using System;
+using Rvt = Autodesk.Revit.DB;
+
+namespace Gim.Revit.Documentation.Model
 {
-    using System;
-    using Rvt = Autodesk.Revit.DB;
     public class CategoryAdapter : Category
     {
         private readonly Rvt.Category category;

@@ -1,7 +1,8 @@
-﻿namespace Gim.Revit.Addin.Journal.View
-{
-    using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using Gim.Revit.Addin.Docs.View;
 
+namespace Gim.Revit.Addin.Journal.View
+{
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>

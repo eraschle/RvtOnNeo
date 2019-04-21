@@ -1,10 +1,11 @@
-﻿namespace Gim.Revit.Documentation.Model
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Rvt = Autodesk.Revit.DB;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Gim.Revit.Wrapper;
+using Rvt = Autodesk.Revit.DB;
 
+namespace Gim.Revit.Documentation.Model
+{
     public class FamilyAdapter : Family
     {
         private readonly Rvt.Family family;

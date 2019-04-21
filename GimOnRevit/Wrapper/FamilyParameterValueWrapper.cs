@@ -1,8 +1,9 @@
-﻿namespace Gim.Revit.Wrapper
-{
-    using System;
-    using Rvt = Autodesk.Revit.DB;
+﻿using System;
+using Gim.Revit.Helper;
+using Rvt = Autodesk.Revit.DB;
 
+namespace Gim.Revit.Wrapper
+{
     public class FamilyParameterValueWrapper : IParameterValueWrapper
     {
         private readonly Rvt.FamilyParameter parameter;

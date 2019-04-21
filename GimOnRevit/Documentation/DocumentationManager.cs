@@ -1,11 +1,15 @@
-﻿namespace Gim.Revit.Documentation
-{
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Net;
-    using Autodesk.Revit.DB;
-    using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using Autodesk.Revit.DB;
+using Gim.Revit.Addin.Journal;
+using Gim.Revit.Documentation.Json;
+using Gim.Revit.Documentation.Model;
+using Gim.Revit.Helper;
+using Newtonsoft.Json;
 
+namespace Gim.Revit.Documentation
+{
     public class DocumentationManager
     {
         public string CreateJson(Document document, DocumentationSetting setting)

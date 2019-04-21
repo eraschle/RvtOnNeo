@@ -1,13 +1,14 @@
-﻿namespace Gim.Revit.Addin.Journal
-{
-    using Autodesk.Revit.Attributes;
-    using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
-    using System;
-    using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Forms;
+﻿using Autodesk.Revit.Attributes;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Gim.Revit.Addin.Journal.View;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Forms;
 
+namespace Gim.Revit.Addin.Journal
+{
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
     [Journaling(JournalingMode.UsingCommandData)]

@@ -1,7 +1,8 @@
-﻿namespace Gim.Revit.Documentation.Json
-{
-    using System;
+﻿using System;
+using Gim.Revit.Documentation.Model;
 
+namespace Gim.Revit.Documentation.Json
+{
     public class ParameterJsonConverter : AGenericJsonConverter
     {
         private readonly Type parameterType = typeof(Parameter);

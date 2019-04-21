@@ -1,9 +1,12 @@
-﻿namespace Gim.Revit.Addin.Journal.View
-{
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Forms;
+using Gim.Domain.Helpers;
+using Gim.Domain.Helpers.Event;
+using Gim.Revit.Addin.Docs.View;
 
+namespace Gim.Revit.Addin.Journal.View
+{
     internal class CreateJournalViewModel : ANotifyPropertyChangedModel
     {
         public CreateJournalViewModel()
@@ -178,7 +181,7 @@
             return list.Count == 0 ? emptyList : new ObservableCollection<RevitFile>(list);
         }
 
-        private readonly ObservableCollection<RevitFile> emptyList = new ObservableCollection<RevitFile> { tmpRevitFile }; 
+        private readonly ObservableCollection<RevitFile> emptyList = new ObservableCollection<RevitFile> { tmpRevitFile };
 
         private static readonly RevitFile tmpRevitFile = new RevitFile("No Files found");
 

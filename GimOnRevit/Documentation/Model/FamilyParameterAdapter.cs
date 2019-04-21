@@ -1,9 +1,9 @@
-﻿namespace Gim.Revit.Documentation.Model
-{
-    using System;
-    using Autodesk.Revit.DB;
-    using Rvt = Autodesk.Revit.DB;
+﻿using System;
+using Autodesk.Revit.DB;
+using Rvt = Autodesk.Revit.DB;
 
+namespace Gim.Revit.Documentation.Model
+{
     class FamilyParameterAdapter : FamilyParameter
     {
         private readonly Rvt.FamilyParameter familyParameter;

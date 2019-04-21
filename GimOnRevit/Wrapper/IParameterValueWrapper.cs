@@ -1,7 +1,7 @@
-﻿namespace Gim.Revit.Wrapper
-{
-    using Rvt = Autodesk.Revit.DB;
+﻿using Rvt = Autodesk.Revit.DB;
 
+namespace Gim.Revit.Wrapper
+{
     public interface IParameterValueWrapper
     {
         string StringValue { get; }

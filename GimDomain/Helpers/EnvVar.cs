@@ -1,9 +1,9 @@
-﻿namespace Gim.Domain.Helpers
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
+namespace Gim.Domain.Helpers
+{
     public static class EnvVar
     {
         public static string ByName(string name)

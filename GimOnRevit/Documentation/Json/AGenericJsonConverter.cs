@@ -1,9 +1,9 @@
-﻿namespace Gim.Revit.Documentation.Json
-{
-    using System;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
+namespace Gim.Revit.Documentation.Json
+{
     public abstract class AGenericJsonConverter : JsonConverter
     {
         public override bool CanRead { get { return false; } }

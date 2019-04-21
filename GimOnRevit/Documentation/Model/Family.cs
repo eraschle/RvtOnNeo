@@ -1,8 +1,8 @@
-﻿namespace Gim.Revit.Documentation.Model
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Gim.Revit.Documentation.Model
+{
     public class Family
     {
         public virtual Guid UniqueId { get; set; }

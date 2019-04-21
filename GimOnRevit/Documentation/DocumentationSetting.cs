@@ -1,8 +1,8 @@
-﻿namespace Gim.Revit.Addin.Journal
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Gim.Revit.Addin.Journal
+{
     public enum DocumentFormat
     {
         None = 0,

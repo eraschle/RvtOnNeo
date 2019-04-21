@@ -1,4 +1,6 @@
-﻿namespace Gim.Revit.Documentation.Json
+﻿using Gim.Revit.Documentation.Model;
+
+namespace Gim.Revit.Documentation.Json
 {
     public class FamilyJsonWarpper
     {

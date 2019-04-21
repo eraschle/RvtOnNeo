@@ -1,9 +1,11 @@
-﻿namespace Gim.Revit.Addin.Journal
-{
-    using System.Collections.Generic;
-    using System.IO;
-    using Autodesk.Revit.ApplicationServices;
+﻿using System.Collections.Generic;
+using System.IO;
+using Autodesk.Revit.ApplicationServices;
+using Gim.Domain.Helpers;
+using Gim.Revit.Addin.Docs;
 
+namespace Gim.Revit.Addin.Journal
+{
     public class CreateJournalSetting
     {
         public static CreateJournalSetting CreateSetting(string jobName, IEnumerable<RevitFile> files)

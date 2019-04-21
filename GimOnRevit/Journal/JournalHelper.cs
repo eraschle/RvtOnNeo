@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace Gim.Revit.Helper.Journal
+namespace Gim.Revit.Journal
 {
-
     /// <summary>
     /// Automates Journal creation.
     /// </summary>

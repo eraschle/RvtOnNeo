@@ -1,7 +1,9 @@
-﻿namespace Gim.Revit.Wrapper
+﻿using System;
+using Gim.Revit.Helper;
+using Rvt = Autodesk.Revit.DB;
+
+namespace Gim.Revit.Wrapper
 {
-    using System;
-    using Rvt = Autodesk.Revit.DB;
 
     public class ParameterValueWrapper : IParameterValueWrapper
     {

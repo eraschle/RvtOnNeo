@@ -1,7 +1,7 @@
-﻿namespace Gim.Revit.Helper
-{
-    using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 
+namespace Gim.Revit.Helper
+{
     public class ConvertHelper
     {
         public static double ConvertFrom(double value, DisplayUnitType displayUnitType)

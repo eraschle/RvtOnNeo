@@ -1,7 +1,7 @@
-﻿namespace Gim.Revit.Documentation.Model
-{
-    using System;
+﻿using System;
 
+namespace Gim.Revit.Documentation.Model
+{
     public class Parameter
     {
         public virtual string Name { get; set; }

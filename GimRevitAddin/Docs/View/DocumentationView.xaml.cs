@@ -1,7 +1,7 @@
-﻿namespace Gim.Revit.Addin.Docs.View
-{
-    using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
+namespace Gim.Revit.Addin.Docs.View
+{
     /// <summary>
     /// Interaction logic for DocumentationView.xaml
     /// </summary>

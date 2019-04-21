@@ -1,8 +1,8 @@
-﻿namespace Gim.Domain.Helpers.Event
-{
-    using System;
+﻿    using System;
     using System.Windows.Input;
 
+namespace Gim.Domain.Helpers.Event
+{
     public class RelayCommand : ICommand
     {
         private readonly Predicate<object> canExecutePredicate;

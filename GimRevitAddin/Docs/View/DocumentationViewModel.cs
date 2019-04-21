@@ -1,7 +1,9 @@
-﻿namespace Gim.Revit.Addin.Docs.View
-{
-    using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using Gim.Domain.Helpers.Event;
+using Gim.Revit.Addin.Journal;
 
+namespace Gim.Revit.Addin.Docs.View
+{
     public class DocumentationViewModel : ANotifyPropertyChangedModel
     {
         public DocumentationViewModel()

@@ -1,7 +1,7 @@
-﻿namespace Gim.Domain.Helpers
-{
-    using System.IO;
+﻿    using System.IO;
 
+namespace Gim.Domain.Helpers
+{
     public static class Directories
     {
 

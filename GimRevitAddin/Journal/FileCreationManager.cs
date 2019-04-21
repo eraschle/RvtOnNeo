@@ -1,11 +1,13 @@
-﻿namespace Gim.Revit.Addin.Journal
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Reflection;
-    using Autodesk.RevitAddIns;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using Autodesk.RevitAddIns;
+using Gim.Revit.Helper;
+using Gim.Revit.Helper.Journal;
 
+namespace Gim.Revit.Addin.Journal
+{
     public class FileCreationManager
     {
         private const string addinFileName = "GimRevitAddin.addin";

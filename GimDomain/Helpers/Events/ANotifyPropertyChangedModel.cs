@@ -1,8 +1,8 @@
-﻿namespace Gim.Domain.Helpers.Event
-{
-    using System.ComponentModel;
+﻿    using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
+namespace Gim.Domain.Helpers.Event
+{
     public abstract class ANotifyPropertyChangedModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

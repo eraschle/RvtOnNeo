@@ -1,11 +1,14 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Gim.Revit.Documentation;
+using Gim.Revit.Helper.Journal;
+
 namespace Gim.Revit.Addin.Journal
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using Autodesk.Revit.DB;
-    using Autodesk.Revit.UI;
 
     public class CreateJournalManager
     {
