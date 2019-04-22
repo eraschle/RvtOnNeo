@@ -68,6 +68,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\ClassHelper.cs" />
+    <Compile Include="Neo4j\ANeoConfig.cs" />
+    <Compile Include="Neo4j\ANeoContext.cs" />
+    <Compile Include="Neo4j\ConfigFactory.cs" />
+    <Compile Include="Neo4j\IGraphDbClient.cs" />
+    <Compile Include="Neo4j\INeoConfig.cs" />
+    <Compile Include="Neo4j\INeoConfigModel.cs" />
+    <Compile Include="Neo4j\INeoConfigRelation.cs" />
+    <Compile Include="Neo4j\INeoKeyModelContext.cs" />
+    <Compile Include="Neo4j\INeoModelContext.cs" />
+    <Compile Include="Neo4j\NeoClient.cs" />
+    <Compile Include="Neo4j\NeoHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
