@@ -1,5 +1,6 @@
 ﻿using System;
 using Autodesk.Revit.DB;
+using Gim.Revit.Helper;
 using Rvt = Autodesk.Revit.DB;
 
 namespace Gim.Revit.Documentation.Model
@@ -19,52 +20,12 @@ namespace Gim.Revit.Documentation.Model
             get { return definition.Name; }
         }
 
-        private string defaultParameterKind
-        {
-            get
-            {
-                var defaultType = ParameterType.Invalid;
-                try
-                {
-                    return LabelUtils.GetLabelFor(defaultType);
-                }
-                catch (Exception)
-                {
-                    return defaultType.ToString();
-                }
-            }
-        }
-
-
         public override string ParameterKind
         {
             get
             {
-                try
-                {
-                    var parameterType = definition.ParameterType;
-                    return LabelUtils.GetLabelFor(parameterType);
-                }
-                catch (Exception)
-                {
-                    return defaultParameterKind;
-                }
-            }
-        }
-
-        private string defaultUnitType
-        {
-            get
-            {
-                var defaultType = DisplayUnitType.DUT_UNDEFINED;
-                try
-                {
-                    return LabelUtils.GetLabelFor(defaultType);
-                }
-                catch (Exception)
-                {
-                    return defaultType.ToString();
-                }
+                var parameterType = definition.ParameterType;
+                return LabelHelper.Get(parameterType);
             }
         }
 
@@ -81,15 +42,8 @@ namespace Gim.Revit.Documentation.Model
         {
             get
             {
-                try
-                {
-                    var displayUnit = familyParameter.DisplayUnitType;
-                    return LabelUtils.GetLabelFor(displayUnit);
-                }
-                catch (Exception)
-                {
-                    return defaultUnitType;
-                }
+                var displayUnit = familyParameter.DisplayUnitType;
+                return LabelHelper.Get(displayUnit);
             }
         }
 
