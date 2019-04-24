@@ -4,129 +4,115 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Gim.Revit.Addin.Journal.View"
-             xmlns:docu="clr-namespace:Gim.Revit.Addin.Docs.View">
+             xmlns:docu="clr-namespace:Gim.Revit.Addin.Docs.View"
+             xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs">
     <UserControl.DataContext>
         <local:CreateJournalViewModel/>
     </UserControl.DataContext>
-    <Grid Margin="2">
-        <StackPanel>
-            <GroupBox Header="Journal Creation" 
-                      HorizontalAlignment="Stretch" 
-                      VerticalAlignment="Stretch">
-                <StackPanel>
+    <StackPanel>
+        <GroupBox Header="Journal Creation" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="100" Width="1*"/>
+                        <ColumnDefinition MinWidth="300" Width="4*"/>
+                        <ColumnDefinition MinWidth="100" Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Family Directory"
+                           Grid.Column="0" Grid.Row="0"
+                           VerticalAlignment="Center"
+                           VerticalContentAlignment="Center"/>
+                    <TextBox Text="{Binding SourcePath}"
+                             IsManipulationEnabled="False"
+                             Grid.Column="1" Grid.Row="0" Margin="2"
+                             HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center"/>
+                    <Button Content="Choose" 
+                            Command="{Binding SourceDirectoryCommand}"
+                            Grid.Column="2" Grid.Row="0" Margin="2"/>
+                    <Label Content="Journal Directory" 
+                            Grid.Column="0" Grid.Row="1"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+                    <TextBox Text="{Binding DestinationPath}"
+                             IsManipulationEnabled="False"
+                             Grid.Column="1" Grid.Row="1" Margin="2"
+                             HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center"/>
+                    <Button Content="Choose" 
+                            Command="{Binding DestinationDirectoryCommand}"
+                            Grid.Column="2" Grid.Row="1" Margin="2"/>
+                </Grid>
+                <GroupBox Header="Option" 
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Stretch">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="100" Width="1*"/>
-                            <ColumnDefinition MinWidth="300" Width="4*"/>
-                            <ColumnDefinition MinWidth="100" Width="1*"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Content="Recursive"
+                                  IsChecked="{Binding RecursiveSearch}"
+                                  Grid.Column="0" Margin="2"/>
+                        <CheckBox Content="Debug Modus"
+                                  IsChecked="{Binding DebugModus}"
+                                  Grid.Column="1" Margin="2"/>
+                    </Grid>
+                </GroupBox>
+                <Expander Header="{Binding FileOverview}" 
+                          IsExpanded="False"
+                          VerticalAlignment="Stretch">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="200"/>
                         </Grid.RowDefinitions>
-                        <Label Content="Family Directory" 
-                               Grid.Column="0" Grid.Row="0"
-                               VerticalAlignment="Center"
-                               VerticalContentAlignment="Center"/>
-                        <TextBox Text="{Binding SourcePath}" 
-                                 IsManipulationEnabled="False"
-                                 Grid.Column="1" Grid.Row="0" Margin="2"
-                                 HorizontalAlignment="Stretch" 
-                                 VerticalAlignment="Stretch"
-                                 VerticalContentAlignment="Center"/>
-                        <Button Content="Choose" 
-                                Command="{Binding SourceDirectoryCommand}"
-                                Grid.Column="2" Grid.Row="0" Margin="2"/>
-                        <Label Content="Journal Directory" 
-                               Grid.Column="0" Grid.Row="1"
-                               VerticalAlignment="Center"
-                               VerticalContentAlignment="Center"/>
-                        <TextBox Text="{Binding DestinationPath}"
-                                 IsManipulationEnabled="False"
-                                 Grid.Column="1" Grid.Row="1" Margin="2"
-                                 HorizontalAlignment="Stretch" 
-                                 VerticalAlignment="Stretch"
-                                 VerticalContentAlignment="Center"/>
-                        <Button Content="Choose" 
-                                Command="{Binding DestinationDirectoryCommand}"
-                                Grid.Column="2" Grid.Row="1" Margin="2"/>
+                        <ListBox x:Name="Allowed"
+                                 ItemsSource="{Binding AllowedFiles}"
+                                 Grid.Column="0" 
+                                 MaxHeight="200" Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,2">
+                                        <TextBlock Text="{Binding Name}" 
+                                                   ToolTip="{Binding FilePath}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox x:Name="Forbidden"
+                                 ItemsSource="{Binding ForbiddenFiles}"
+                                 Grid.Column="1"
+                                 MaxHeight="200" Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,2">
+                                        <TextBlock Text="{Binding Name}" 
+                                                   ToolTip="{Binding FilePath}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </Grid>
-                    <GroupBox Header="Option" 
-                              HorizontalAlignment="Stretch" 
-                              VerticalAlignment="Stretch">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <CheckBox Content="Recursive"
-                                      IsChecked="{Binding RecursiveSearch}"
-                                      Grid.Column="0" Margin="2"/>
-                            <CheckBox Content="Debug Modus"
-                                      IsChecked="{Binding DebugModus}"
-                                      Grid.Column="1" Margin="2"/>
-                        </Grid>
-                    </GroupBox>
-                    <Expander Header="{Binding FileOverview}" 
-                              IsExpanded="False"
-                              VerticalAlignment="Stretch">
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="200"/>
-                            </Grid.RowDefinitions>
-                            <ListBox x:Name="Allowed"
-                                     ItemsSource="{Binding AllowedFiles}"
-                                     Grid.Column="0" 
-                                     MaxHeight="200" Margin="5">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,2">
-                                            <TextBlock Text="{Binding Name}" 
-                                                       ToolTip="{Binding FilePath}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                            <ListBox x:Name="Forbidden"
-                                     ItemsSource="{Binding ForbiddenFiles}"
-                                     Grid.Column="1"
-                                     MaxHeight="200" Margin="5">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,2">
-                                            <TextBlock Text="{Binding Name}" 
-                                                       ToolTip="{Binding FilePath}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </Grid>
-                    </Expander>
+                </Expander>
 
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Header="Documentation Options" 
-                      HorizontalAlignment="Stretch" 
-                      VerticalAlignment="Stretch">
-                <docu:DocumentationView x:Name="viewDocumentation"/>
-            </GroupBox>
-            <Grid Margin="0,5,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button Content="Ok" 
-                        Command="{Binding OkayCommand}"
-                        Grid.Column="1" Margin="2"/>
-                <Button Content="Cancel" 
-                        Command="{Binding CancelCommand}"
-                        Grid.Column="2" Margin="2"/>
-            </Grid>
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Documentation Options" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch">
+            <docu:DocumentationView x:Name="viewDocumentation"/>
+        </GroupBox>
+    </StackPanel>
 </UserControl>
