@@ -1,10 +1,11 @@
-﻿using System.Windows.Forms;
-using Gim.Domain.Helpers.Event;
+﻿using Gim.Domain.Helpers.Event;
+using Gim.Revit.Addin.Helper;
 using Gim.Revit.Addin.Journal;
 
 namespace Gim.Revit.Addin.Docs.View
 {
-    public class DocumentationViewModel : ANotifyPropertyChangedModel
+    public class DocumentationViewModel 
+        : ANotifyPropertyChangedModel, IDialogContentViewModel
     {
         public DocumentationViewModel()
         {
@@ -17,13 +18,9 @@ namespace Gim.Revit.Addin.Docs.View
         public bool IsJson
         {
             get { return isJson; }
-
             set
             {
-                if (value == isJson)
-                {
-                    return;
-                }
+                if (value == isJson) { return; }
 
                 isJson = value;
                 NotifyPropertyChanged();
@@ -36,10 +33,7 @@ namespace Gim.Revit.Addin.Docs.View
             get { return isWeb; }
             set
             {
-                if (value == isWeb)
-                {
-                    return;
-                }
+                if (value == isWeb) { return; }
 
                 isWeb = value;
                 NotifyPropertyChanged();
@@ -89,27 +83,10 @@ namespace Gim.Revit.Addin.Docs.View
             get { return formatJson; }
             set
             {
-                if (value == formatJson)
-                {
-                    return;
-                }
+                if (value == formatJson) { return; }
 
                 formatJson = value;
                 NotifyPropertyChanged();
-            }
-        }
-
-        public bool CanExecute
-        {
-            get
-            {
-                var canExecute = true;
-                if (IsWeb)
-                {
-                    canExecute &= string.IsNullOrEmpty(WebUrl) == false;
-                    canExecute &= string.IsNullOrEmpty(ApiKey) == false;
-                }
-                return canExecute;
             }
         }
 
@@ -129,20 +106,21 @@ namespace Gim.Revit.Addin.Docs.View
             }
         }
 
-        public DialogResult Result { get; set; } = DialogResult.OK;
+        public object CommandParameter { get; set; }
 
-        private bool CanOkayExecute(object parameter)
+        public bool CanExecute(object parameter)
         {
-            return CanExecute;
+            var canExecute = true;
+            if (IsWeb)
+            {
+                canExecute &= string.IsNullOrEmpty(WebUrl) == false;
+                canExecute &= string.IsNullOrEmpty(ApiKey) == false;
+            }
+            return canExecute;
         }
 
-        private void OkayExecution(object parameter)
-        {
-            Result = DialogResult.OK;
-        }
-        private void CancelExecution(object parameter)
-        {
-            Result = DialogResult.Cancel;
-        }
+        public void ExecuteOkay(object parameter) { }
+
+        public void ExecuteCancel(object parameter) { }
     }
 }

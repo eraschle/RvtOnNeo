@@ -1,11 +1,10 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Gim.Revit.Addin.Helper;
 using Gim.Revit.Addin.Journal.View;
 using System;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Forms;
 
 namespace Gim.Revit.Addin.Journal
 {
@@ -14,27 +13,20 @@ namespace Gim.Revit.Addin.Journal
     [Journaling(JournalingMode.UsingCommandData)]
     public class CreateJournalCommand : IExternalCommand
     {
-
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
             {
                 var viewModel = new CreateJournalViewModel();
-                var view = new CreateJournalView
-                {
-                    DataContext = viewModel
-                };
+                var view = new CreateJournalView();
 
                 viewModel.SetDocumentationViewModel(view.DocumentationViewModel);
+                view.DataContext = viewModel;
 
-                var dialog = new Window
-                {
-                    Content = view,
-                    SizeToContent = SizeToContent.WidthAndHeight
-                };
+                var dialog = new WpfDialog(view);
                 dialog.ShowDialog();
 
-                if (viewModel.Result == DialogResult.OK)
+                if (dialog.DialogResult == true)
                 {
                     var application = commandData.Application.Application;
                     var manager = new FileCreationManager();

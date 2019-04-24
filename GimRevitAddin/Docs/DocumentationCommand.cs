@@ -2,10 +2,9 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Gim.Revit.Addin.Docs.View;
+using Gim.Revit.Addin.Helper;
 using Gim.Revit.Addin.Journal;
 using System;
-using System.Windows;
-using System.Windows.Forms;
 
 namespace Gim.Revit.Addin.Docs
 {
@@ -43,25 +42,18 @@ namespace Gim.Revit.Addin.Docs
                 return Result.Failed;
             }
 
-            var manager = new CreateJournalManager(commandData);
-            var viewModel = new DocumentationViewModel();
-            if (manager.CanReadData == false)
-            {
-                var view = new DocumentationView
-                {
-                    DataContext = viewModel
-                };
-
-                var dialog = new Window
-                {
-                    Content = view,
-                    SizeToContent = SizeToContent.WidthAndHeight
-                };
-                dialog.ShowDialog();
-            }
             try
             {
-                if (manager.CanReadData || viewModel.Result == DialogResult.OK)
+                var viewModel = new DocumentationViewModel();
+                var view = new DocumentationView { DataContext = viewModel };
+                var dialog = new WpfDialog(view);
+
+                var manager = new CreateJournalManager(commandData);
+                if (manager.CanReadData == false)
+                {
+                    dialog.ShowDialog();
+                }
+                if (manager.CanReadData || dialog.DialogResult == true)
                 {
                     var setting = viewModel.Settings;
                     var tran = new Transaction(doc, "Family Documentation");
