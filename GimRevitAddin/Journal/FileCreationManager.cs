@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Autodesk.Revit.DB;
 using Autodesk.RevitAddIns;
 using Gim.Revit.Helper;
 using Gim.Revit.Helper.Journal;
@@ -61,7 +62,13 @@ namespace Gim.Revit.Addin.Journal
         public void CreateAddinFile(CreateJournalSetting setting)
         {
             var fullPath = Assembly.GetAssembly(GetType()).Location;
-            var currentManifest = GetCurrentManifest(fullPath);
+            if (Guid.TryParse(setting.AddinId, out var addinGuid) == false)
+            {
+                throw new ArgumentException("No valid AddinId - can NOT be parsed to GUID");
+            }
+
+            var addinId = new AddInId(addinGuid);
+            var currentManifest = GetCurrentManifest(fullPath, addinId);
             if (HasCommandId(currentManifest, setting.AddinId, out var command))
             {
                 var newCommand = CreateNew(fullPath, command);
@@ -72,11 +79,35 @@ namespace Gim.Revit.Addin.Journal
             }
         }
 
-        private RevitAddInManifest GetCurrentManifest(string fullPathDll)
+        private RevitAddInManifest GetCurrentManifest(string fullPathDll, AddInId addInId)
         {
             var dirPath = Path.GetDirectoryName(fullPathDll);
-            var manifestPath = Path.Combine(dirPath, addinFileName);
-            return AddInManifestUtility.GetRevitAddInManifest(manifestPath);
+            //var manifestPath = Path.Combine(dirPath, addinFileName);
+            var addins = AddInManifestUtility.GetRevitAddInManifests(dirPath, new Dictionary<string, string>());
+            if (addins == null || addins.Count == 0) { return null; }
+
+            RevitAddInManifest searchedAddin = null;
+            foreach (var addin in addins)
+            {
+                foreach (var command in addin.AddInCommands)
+                {
+                    var cmdId = command.AddInId;
+                    if (cmdId.Equals(addInId.GetGUID()) == false)
+                    {
+                        continue;
+                    }
+
+                    searchedAddin = addin;
+                    break;
+                }
+
+                if (searchedAddin != null)
+                {
+                    break;
+                }
+            }
+            //return AddInManifestUtility.GetRevitAddInManifest(manifestPath);
+            return searchedAddin is null ? new RevitAddInManifest() : searchedAddin;
         }
 
         private RevitAddInCommand CreateNew(string fullDllPat, RevitAddInCommand current)
