@@ -4,10 +4,12 @@ using System.Windows.Forms;
 using Gim.Domain.Helpers;
 using Gim.Domain.Helpers.Event;
 using Gim.Revit.Addin.Docs.View;
+using Gim.Revit.Addin.Helper;
 
 namespace Gim.Revit.Addin.Journal.View
 {
-    internal class CreateJournalViewModel : ANotifyPropertyChangedModel
+    internal class CreateJournalViewModel
+        : ANotifyPropertyChangedModel, IDialogContentViewModel
     {
         public CreateJournalViewModel()
         {
@@ -17,13 +19,10 @@ namespace Gim.Revit.Addin.Journal.View
             SourceDirectoryCommand = new RelayCommand(SelectSource);
             DestinationDirectoryCommand = new RelayCommand(SelectDestination);
 
-            allowedFiles = emptyList;
-            forbiddenFiles = emptyList;
+            allowedFiles = new ObservableCollection<RevitFile>();
+            forbiddenFiles = new ObservableCollection<RevitFile>();
             recursive = true;
             debugModus = false;
-
-            OkayCommand = new RelayCommand(OkayExecution, CanOkayExecute);
-            CancelCommand = new RelayCommand(CancelExecution);
         }
 
         private DocumentationViewModel docuViewModel;
@@ -38,10 +37,7 @@ namespace Gim.Revit.Addin.Journal.View
             get { return sourcePath; }
             set
             {
-                if (value.Equals(sourcePath))
-                {
-                    return;
-                }
+                if (value.Equals(sourcePath)) { return; }
 
                 sourcePath = value;
                 NotifyPropertyChanged();
@@ -54,10 +50,7 @@ namespace Gim.Revit.Addin.Journal.View
             get { return destinationPath; }
             set
             {
-                if (value.Equals(destinationPath))
-                {
-                    return;
-                }
+                if (value.Equals(destinationPath)) { return; }
 
                 destinationPath = value;
                 NotifyPropertyChanged();
@@ -145,8 +138,6 @@ namespace Gim.Revit.Addin.Journal.View
             get { return allowedFiles; }
             set
             {
-                if (value.Count == 0) { value = emptyList; }
-
                 allowedFiles = value;
                 NotifyPropertyChanged();
             }
@@ -163,8 +154,6 @@ namespace Gim.Revit.Addin.Journal.View
             get { return forbiddenFiles; }
             set
             {
-                if (value.Count == 0) { value = emptyList; }
-
                 forbiddenFiles = value;
                 NotifyPropertyChanged();
             }
@@ -178,33 +167,20 @@ namespace Gim.Revit.Addin.Journal.View
 
         private ObservableCollection<RevitFile> GetList(ICollection<RevitFile> list)
         {
-            return list.Count == 0 ? emptyList : new ObservableCollection<RevitFile>(list);
+            return new ObservableCollection<RevitFile>(list);
         }
 
-        private readonly ObservableCollection<RevitFile> emptyList = new ObservableCollection<RevitFile> { tmpRevitFile };
+        public object CommandParameter { get; set; }
 
-        private static readonly RevitFile tmpRevitFile = new RevitFile("No Files found");
-
-        public RelayCommand OkayCommand { get; }
-
-        public RelayCommand CancelCommand { get; }
-
-        public DialogResult Result { get; set; } = DialogResult.None;
-
-        private bool CanOkayExecute(object parameter)
+        public bool CanExecute(object parameter)
         {
-            var canExecute = AllowedFiles.Count > 0 && AllowedFiles[0].Equals(tmpRevitFile) == false;
-            return canExecute && docuViewModel.CanExecute; ;
+            var canExecute = AllowedFiles.Count > 0;
+            return canExecute && docuViewModel.CanExecute(parameter);
         }
 
-        private void OkayExecution(object parameter)
-        {
-            Result = DialogResult.OK;
-        }
-        private void CancelExecution(object parameter)
-        {
-            Result = DialogResult.Cancel;
-        }
+        public void ExecuteOkay(object parameter) { }
+
+        public void ExecuteCancel(object parameter) { }
 
         public CreateJournalSetting Setting
         {
@@ -221,6 +197,5 @@ namespace Gim.Revit.Addin.Journal.View
                 return settings;
             }
         }
-
     }
 }

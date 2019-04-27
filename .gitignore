@@ -4,3 +4,4 @@ bin
 obj
 /GimOnRevit/GimOnRevit.csproj.user
 /GimDomain/GimDomain.csproj.user
+/GimDataSource/GimDataSource.csproj.user

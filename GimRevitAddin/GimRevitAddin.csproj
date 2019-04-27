@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -68,6 +69,12 @@
       <DependentUpon>DocumentationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Docs\View\DocumentationViewModel.cs" />
+    <Compile Include="Helper\WpfDialogView.xaml.cs">
+      <DependentUpon>WpfDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\WpfDialogViewModel.cs" />
+    <Compile Include="Helper\IDialogContentViewModel.cs" />
+    <Compile Include="Helper\WpfDialog.cs" />
     <Compile Include="Journal\FileCreationManager.cs" />
     <Compile Include="Journal\CreateJournalCommand.cs" />
     <Compile Include="Docs\DocumentationCommand.cs" />
@@ -97,6 +104,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Docs\View\DocumentationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Helper\WpfDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

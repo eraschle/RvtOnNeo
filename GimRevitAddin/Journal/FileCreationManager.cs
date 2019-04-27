@@ -82,31 +82,24 @@ namespace Gim.Revit.Addin.Journal
         private RevitAddInManifest GetCurrentManifest(string fullPathDll, AddInId addInId)
         {
             var dirPath = Path.GetDirectoryName(fullPathDll);
-            //var manifestPath = Path.Combine(dirPath, addinFileName);
             var addins = AddInManifestUtility.GetRevitAddInManifests(dirPath, new Dictionary<string, string>());
             if (addins == null || addins.Count == 0) { return null; }
 
             RevitAddInManifest searchedAddin = null;
-            foreach (var addin in addins)
+            var it = addins.GetEnumerator();
+            while (it.MoveNext() && searchedAddin == null)
             {
-                foreach (var command in addin.AddInCommands)
+                var addin = it.Current;
+                var cmdIt = addin.AddInCommands.GetEnumerator();
+                while (cmdIt.MoveNext() && searchedAddin == null)
                 {
-                    var cmdId = command.AddInId;
-                    if (cmdId.Equals(addInId.GetGUID()) == false)
+                    var cmdId = cmdIt.Current.AddInId;
+                    if (cmdId.Equals(addInId.GetGUID()))
                     {
-                        continue;
+                        searchedAddin = addin;
                     }
-
-                    searchedAddin = addin;
-                    break;
-                }
-
-                if (searchedAddin != null)
-                {
-                    break;
                 }
             }
-            //return AddInManifestUtility.GetRevitAddInManifest(manifestPath);
             return searchedAddin is null ? new RevitAddInManifest() : searchedAddin;
         }
 
