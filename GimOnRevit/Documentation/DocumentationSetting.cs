@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static Gim.Revit.Helper.FileHelper;
 
 namespace Gim.Revit.Addin.Journal
 {
@@ -16,8 +17,11 @@ namespace Gim.Revit.Addin.Journal
         internal const string FORMAT_JSON_KEY = "FormatJson";
         internal const string URL_KEY = "Url";
         internal const string API_KEY = "APiKey";
+        internal const string NEW_LINE_SYMBOL = "LineEnding";
 
         public DocumentFormat DocumentFormat { get; set; }
+
+        public NewLine NewLineSymbol { get; set; }
 
         public bool FormatJson { get; set; }
 
@@ -35,6 +39,7 @@ namespace Gim.Revit.Addin.Journal
                 { FORMAT_JSON_KEY, FormatJson.ToString() },
                 { URL_KEY, WebUrl },
                 { API_KEY, ApiKey },
+                { NEW_LINE_SYMBOL, NewLineSymbol.ToString() }
             };
             return journalData;
         }
@@ -45,12 +50,19 @@ namespace Gim.Revit.Addin.Journal
             SetJsonFormat(journalData);
             SetUrl(journalData);
             SetApiKey(journalData);
+            SetNewLineSymbol(journalData);
         }
 
         private void SetDocumentFormat(IDictionary<string, string> journalData)
         {
-            var formatValue = GetSpecialData(journalData, DOCUMENTATION_KEY);
             DocumentFormat = DocumentFormat.None;
+
+            var formatValue = string.Empty;
+            try { formatValue = GetSpecialData(journalData, DOCUMENTATION_KEY); }
+            catch { }
+
+            if (string.IsNullOrEmpty(formatValue)) { return; }
+
             foreach (var format in Enum.GetValues(typeof(DocumentFormat)))
             {
                 if (formatValue.Equals(format.ToString()))
@@ -76,6 +88,25 @@ namespace Gim.Revit.Addin.Journal
         {
             var apiKey = GetSpecialData(journalData, API_KEY);
             ApiKey = apiKey;
+        }
+
+        private void SetNewLineSymbol(IDictionary<string, string> journalData)
+        {
+            NewLineSymbol = NewLine.None;
+
+            var newLineSymbol = string.Empty;
+            try { newLineSymbol = GetSpecialData(journalData, NEW_LINE_SYMBOL); }
+            catch { }
+
+            if (string.IsNullOrEmpty(newLineSymbol)) { return; }
+
+            foreach (var newLine in Enum.GetValues(typeof(NewLine)))
+            {
+                if (newLineSymbol.Equals(newLine.ToString()))
+                {
+                    NewLineSymbol = (NewLine)newLine;
+                }
+            }
         }
 
         /// <summary>

@@ -16,24 +16,42 @@
             <RadioButton x:Name="rdbJson"
                          Content="Json" 
                          GroupName="Output"
-                         IsChecked="{Binding IsJson}"/>
+                         IsChecked="{Binding IsJson, FallbackValue=true}"/>
             <GroupBox Header="Options" 
                       IsEnabled="{Binding ElementName=rdbJson, Path=IsChecked}"
                       HorizontalAlignment="Stretch" 
                       VerticalAlignment="Stretch">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
+                <Grid Margin="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <CheckBox Content="Format Json" 
-                              IsChecked="{Binding FormatJson}"/>
+                              IsChecked="{Binding FormatJson, FallbackValue=true}"
+                              Margin="2"/>
+                    <GroupBox Header="Line Ending" 
+                              IsEnabled="{Binding ElementName=rdbJson, 
+                                                  Path=IsChecked}"
+                              Grid.Column="1"
+                              HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Stretch">
+                        <StackPanel>
+                            <RadioButton Content="Windows (\r\n)" 
+                                         GroupName="LineEnding"
+                                         IsChecked="{Binding WindowLineEnding, 
+                                                             FallbackValue=true}"
+                                         Margin="2"/>
+                            <RadioButton Content="Linux (\n)" 
+                                         GroupName="LineEnding"
+                                         IsChecked="{Binding LinuxLineEnding}"
+                                         Margin="2"/>
+                            <RadioButton Content="Mac OS (\n)" 
+                                         GroupName="LineEnding"
+                                         IsChecked="{Binding MacOsLineEnding}"
+                                         Margin="2"/>
+                        </StackPanel>
+                    </GroupBox>
+
                 </Grid>
             </GroupBox>
         </StackPanel>

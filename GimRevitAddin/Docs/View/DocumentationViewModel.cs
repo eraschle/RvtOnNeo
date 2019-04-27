@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using Gim.Domain.Helpers.Event;
 using Gim.Revit.Addin.Journal;
+using static Gim.Revit.Helper.FileHelper;
 
 namespace Gim.Revit.Addin.Docs.View
 {
@@ -11,6 +12,7 @@ namespace Gim.Revit.Addin.Docs.View
             isJson = true;
             isWeb = false;
             formatJson = true;
+            windwosLineEnding = true;
         }
 
         private bool isJson;
@@ -99,11 +101,73 @@ namespace Gim.Revit.Addin.Docs.View
             }
         }
 
+        private bool windwosLineEnding;
+        public bool WindowLineEnding
+        {
+            get { return windwosLineEnding; }
+            set
+            {
+                if (value == windwosLineEnding)
+                {
+                    return;
+                }
+
+                windwosLineEnding = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        private bool linuxLineEnding;
+        public bool LinuxLineEnding
+        {
+            get { return linuxLineEnding; }
+            set
+            {
+                if (value == linuxLineEnding)
+                {
+                    return;
+                }
+
+                linuxLineEnding = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool macOsLineEnding;
+        public bool MacOsLineEnding
+        {
+            get { return macOsLineEnding; }
+            set
+            {
+                if (value == macOsLineEnding)
+                {
+                    return;
+                }
+
+                macOsLineEnding = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private NewLine NewLineSymbol
+        {
+            get
+            {
+                return WindowLineEnding ? NewLine.Windows : 
+                    LinuxLineEnding ? NewLine.Linux : 
+                    MacOsLineEnding ? NewLine.MacOs : 
+                    NewLine.None;
+            }
+        }
+
         public bool CanExecute
         {
             get
             {
-                var canExecute = true;
+                var canExecute = windwosLineEnding
+                                || linuxLineEnding
+                                || macOsLineEnding;
                 if (IsWeb)
                 {
                     canExecute &= string.IsNullOrEmpty(WebUrl) == false;
@@ -123,6 +187,7 @@ namespace Gim.Revit.Addin.Docs.View
                     FormatJson = IsJson ? FormatJson : false,
                     WebUrl = IsWeb ? WebUrl : string.Empty,
                     ApiKey = IsWeb ? ApiKey : string.Empty,
+                    NewLineSymbol = NewLineSymbol,
                     WrapGimObjects = true
                 };
                 return setting;

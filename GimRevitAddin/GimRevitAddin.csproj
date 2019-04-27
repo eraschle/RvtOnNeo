@@ -62,6 +62,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestJsonCommand.cs" />
     <Compile Include="Docs\DocumentationController.cs" />
     <Compile Include="Docs\View\DocumentationView.xaml.cs">
       <DependentUpon>DocumentationView.xaml</DependentUpon>

@@ -12,6 +12,12 @@ namespace Gim.Revit.Documentation.Model
                 ?? throw new ArgumentException("Category is null");
         }
 
+        public override int RevitId
+        {
+            get { return category.Id.IntegerValue; }
+            set { }
+        }
+        
         public override string Name
         {
             get { return category.Name; }
@@ -29,5 +35,6 @@ namespace Gim.Revit.Documentation.Model
 
             set { }
         }
+
     }
 }

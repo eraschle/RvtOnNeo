@@ -22,4 +22,15 @@
     <VendorId>RASCER</VendorId>
     <VendorDescription>RASCER Dev</VendorDescription>
   </AddIn>
+  <AddIn Type="Command">
+    <Assembly>Gim/GimRevitAddin.dll</Assembly>
+    <ClientId>288339e9-ecc3-45bf-9777-45914e66a65b</ClientId>
+    <FullClassName>Gim.Revit.Addin.TestJsonCommand</FullClassName>
+    <Text>Create Documenation Journals</Text>
+    <Description>Creates all jounral files of all Revit files in the choosen directory.</Description>
+    <!--<VisibilityMode>NotVisibleInProject</VisibilityMode>-->
+    <!--<VisibilityMode>NotVisibleInFamily</VisibilityMode>-->
+    <VendorId>RASCER</VendorId>
+    <VendorDescription>RASCER Dev</VendorDescription>
+  </AddIn>
 </RevitAddIns>
