@@ -12,7 +12,7 @@ namespace Gim.Revit.Helper
 
         public static IDictionary<NewLine, string> NewLineSymbols { get; private set; }
 
-        public static string Convert(string content, NewLine fromSymbol, NewLine toSymbol)
+        public static string ConvertNewLine(string content, NewLine fromSymbol, NewLine toSymbol)
         {
             if (string.IsNullOrEmpty(content)) { return content; }
 
