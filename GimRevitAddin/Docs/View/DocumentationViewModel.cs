@@ -125,30 +125,12 @@ namespace Gim.Revit.Addin.Docs.View
             }
         }
 
-        private bool macOsLineEnding;
-        public bool MacOsLineEnding
-        {
-            get { return macOsLineEnding; }
-            set
-            {
-                if (value == macOsLineEnding)
-                {
-                    return;
-                }
-
-                macOsLineEnding = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         private NewLine NewLineSymbol
         {
             get
             {
                 return WindowLineEnding ? NewLine.Windows :
-                    LinuxLineEnding ? NewLine.Linux :
-                    MacOsLineEnding ? NewLine.MacOs :
-                    NewLine.None;
+                    LinuxLineEnding ? NewLine.Linux : NewLine.None;
             }
         }
 
@@ -194,7 +176,7 @@ namespace Gim.Revit.Addin.Docs.View
 
         public bool CanExecute(object parameter)
         {
-            var canExecute = windwosLineEnding || linuxLineEnding || macOsLineEnding;
+            var canExecute = windwosLineEnding || linuxLineEnding;
             if (IsWeb)
             {
                 canExecute &= string.IsNullOrEmpty(WebUrl) == false;

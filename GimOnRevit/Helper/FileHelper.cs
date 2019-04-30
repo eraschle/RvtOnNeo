@@ -8,7 +8,7 @@ namespace Gim.Revit.Helper
     public class FileHelper
     {
 
-        public enum NewLine { None, Windows, Linux, MacOs }
+        public enum NewLine { None, Windows, Linux }
 
         public static IDictionary<NewLine, string> NewLineSymbols { get; private set; }
 
@@ -35,7 +35,6 @@ namespace Gim.Revit.Helper
                 { NewLine.None, string.Empty },
                 { NewLine.Windows, "\r\n" },
                 { NewLine.Linux, "\n" },
-                { NewLine.MacOs, "\n" }
             };
         }
 
@@ -118,24 +117,22 @@ namespace Gim.Revit.Helper
             return filePath.Replace(fileName, $"{sourceName}.{extension}");
         }
 
-        /// <summary>
-        /// Deletes the journal file if it already exists.
-        /// </summary>
-        /// <param name="journalFilePath">The path of the generated journal file.</param>
-        private static void DeleteFile(string journalFilePath)
+        public static bool DeleteFile(string journalFilePath)
         {
-            if (File.Exists(journalFilePath))
+            if (File.Exists(journalFilePath) == false) { return false; }
+
+            try
             {
                 File.Delete(journalFilePath);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
-        /// <summary>
-        /// Writes the journal file.
-        /// </summary>
-        /// <param name="filePath">The path of the generated journal file.</param>
-        /// <param name="fileContent">The string for the journal file.</param>
-        public static void WriteFile(string filePath, string fileContent)
+        public static void WriteFile(string filePath, string fileContent, bool deleteExisting = true)
         {
             DeleteFile(filePath);
             var encoding = new UTF8Encoding(false);
