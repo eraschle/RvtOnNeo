@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.UI;
 using Gim.Domain.Helpers;
 using Gim.Revit.Addin.Docs;
 
@@ -46,10 +47,12 @@ namespace Gim.Revit.Addin.Journal
 
         public string RevitDirectory { get; private set; }
 
-        internal void SetRevitDirectory(Application application)
+        internal void SetRevitDirectory(ExternalCommandData commandData)
         {
-            var programm = EnvVar.ByName("ProgramW6432");
+            var application = commandData.Application.Application;
             var version = application.VersionNumber;
+
+            var programm = EnvVar.ByName("ProgramW6432");
             var path = Path.Combine(programm, "Autodesk", $"Revit {version}");
             RevitDirectory = path;
         }
