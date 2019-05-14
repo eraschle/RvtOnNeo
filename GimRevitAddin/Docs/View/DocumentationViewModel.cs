@@ -1,7 +1,7 @@
 ﻿using Gim.Domain.Helpers.Event;
 using Gim.Revit.Addin.Helper;
 using Gim.Revit.Addin.Journal;
-using static Gim.Revit.Helper.FileHelper;
+using static Gim.Domain.Helpers.FileHelper;
 
 namespace Gim.Revit.Addin.Docs.View
 {

@@ -42,8 +42,16 @@ namespace Gim.Revit.Documentation.Model
         {
             get
             {
-                var displayUnit = familyParameter.DisplayUnitType;
-                return LabelHelper.Get(displayUnit);
+                var defaultDUT = DisplayUnitType.DUT_UNDEFINED;
+                try
+                {
+                    var displayUnit = familyParameter.DisplayUnitType;
+                    return LabelHelper.Get(displayUnit, defaultDUT);
+                }
+                catch (Exception)
+                {
+                    return defaultDUT.ToString();
+                }
             }
         }
 

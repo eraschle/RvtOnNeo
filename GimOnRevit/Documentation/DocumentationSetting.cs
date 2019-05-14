@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Gim.Revit.Helper.FileHelper;
+using static Gim.Domain.Helpers.FileHelper;
 
 namespace Gim.Revit.Addin.Journal
 {

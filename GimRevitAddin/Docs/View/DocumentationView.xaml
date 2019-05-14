@@ -25,11 +25,9 @@
             <StackPanel Orientation="Horizontal"
                         VerticalAlignment="Stretch"
                         HorizontalAlignment="Stretch">
-                <CheckBox Content="Export FL" Margin="2"
-                          IsChecked="{Binding ExportFbx}"/>
-                <CheckBox Content="Template: Some name" Margin="2"
-                          IsChecked="{Binding ViewModelProperty}"
-                          IsEnabled="False"/>
+                <CheckBox Content="Export FBX" Margin="2"
+                          IsChecked="{Binding ExportFbx, 
+                                      FallbackValue=false}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Line Ending" 

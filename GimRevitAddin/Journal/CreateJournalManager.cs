@@ -50,6 +50,8 @@ namespace Gim.Revit.Addin.Journal
                     break;
             }
 
+            manager.CreateFbx(document, setting);
+
             if (ReadJournalData)
             {
                 JournalHelper.KillCurrentProcess();

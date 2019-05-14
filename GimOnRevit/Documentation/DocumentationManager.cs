@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using Autodesk.Revit.DB;
+using Gim.Domain.Helpers;
+using Gim.Domain.Writer;
 using Gim.Revit.Addin.Journal;
 using Gim.Revit.Documentation.Json;
 using Gim.Revit.Documentation.Model;
@@ -12,6 +14,8 @@ namespace Gim.Revit.Documentation
 {
     public class DocumentationManager
     {
+        private GimJsonWriter writer = new GimJsonWriter();
+
         public string CreateJson(Document document, DocumentationSetting setting)
         {
             var famDoc = new FamilyAdapter(document.OwnerFamily);
@@ -61,6 +65,48 @@ namespace Gim.Revit.Documentation
             {
                 var result = streamReader.ReadToEnd();
             }
+        }
+
+        public void CreateFbx(Document document, DocumentationSetting setting)
+        {
+            if (setting.ExportFbx == false) { return; }
+
+            var folder = GetFolderPath(document);
+            var name = GetFbxFileName(document);
+            var views = Get3dViewSet(document);
+            var option = GetOptions();
+            document.Export(folder, name, views, option);
+        }
+
+        private string GetFbxFileName(Document document)
+        {
+            var fileName = FileHelper.ChangeExtension(document.PathName, "fbx");
+            FileHelper.DeleteFile(fileName);
+            return Path.GetFileName(fileName);
+        }
+
+        private string GetFolderPath(Document document)
+        {
+            var fileName = document.PathName;
+            return Path.GetDirectoryName(fileName);
+        }
+
+        private ViewSet Get3dViewSet(Document document)
+        {
+            var views = new ViewSet();
+            views.Insert(ViewHelper.Default3D(document));
+            return views;
+        }
+
+        private FBXExportOptions GetOptions()
+        {
+            return new FBXExportOptions
+            {
+                WithoutBoundaryEdges = true,
+                LevelsOfDetailValue = 15, // range 1..15 
+                UseLevelsOfDetail = true,
+                StopOnError = false
+            };
         }
     }
 }
