@@ -1,11 +1,11 @@
 ﻿using Gim.Domain.Helpers.Event;
 using Gim.Revit.Addin.Helper;
 using Gim.Revit.Addin.Journal;
-using static Gim.Revit.Helper.FileHelper;
+using static Gim.Domain.Helpers.FileHelper;
 
 namespace Gim.Revit.Addin.Docs.View
 {
-    public class DocumentationViewModel 
+    public class DocumentationViewModel
         : ANotifyPropertyChangedModel, IDialogContentViewModel
     {
         public DocumentationViewModel()
@@ -125,48 +125,32 @@ namespace Gim.Revit.Addin.Docs.View
             }
         }
 
-        private bool macOsLineEnding;
-        public bool MacOsLineEnding
-        {
-            get { return macOsLineEnding; }
-            set
-            {
-                if (value == macOsLineEnding)
-                {
-                    return;
-                }
-
-                macOsLineEnding = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         private NewLine NewLineSymbol
         {
             get
             {
-                return WindowLineEnding ? NewLine.Windows : 
-                    LinuxLineEnding ? NewLine.Linux : 
-                    MacOsLineEnding ? NewLine.MacOs : 
-                    NewLine.None;
+                return WindowLineEnding ? NewLine.Windows :
+                    LinuxLineEnding ? NewLine.Linux : NewLine.None;
             }
         }
 
-        public bool CanExecute
+        private bool exportFbx;
+        public bool ExportFbx
         {
-            get
+            get { return exportFbx; }
+            set
             {
-                var canExecute = windwosLineEnding
-                                || linuxLineEnding
-                                || macOsLineEnding;
-                if (IsWeb)
+                if (value == exportFbx)
                 {
-                    canExecute &= string.IsNullOrEmpty(WebUrl) == false;
-                    canExecute &= string.IsNullOrEmpty(ApiKey) == false;
+                    return;
                 }
-                return canExecute;
+
+                exportFbx = value;
+                NotifyPropertyChanged();
             }
         }
+
+        public object CommandParameter { get; set; }
 
         public DocumentationSetting Settings
         {
@@ -174,6 +158,7 @@ namespace Gim.Revit.Addin.Docs.View
             {
                 var setting = new DocumentationSetting
                 {
+                    ExportFbx = ExportFbx,
                     DocumentFormat = DocumentFormat,
                     FormatJson = IsJson ? FormatJson : false,
                     WebUrl = IsWeb ? WebUrl : string.Empty,
@@ -185,11 +170,13 @@ namespace Gim.Revit.Addin.Docs.View
             }
         }
 
-        public object CommandParameter { get; set; }
+        public void ExecuteOkay(object parameter) { }
+
+        public void ExecuteCancel(object parameter) { }
 
         public bool CanExecute(object parameter)
         {
-            var canExecute = true;
+            var canExecute = windwosLineEnding || linuxLineEnding;
             if (IsWeb)
             {
                 canExecute &= string.IsNullOrEmpty(WebUrl) == false;
@@ -197,9 +184,5 @@ namespace Gim.Revit.Addin.Docs.View
             }
             return canExecute;
         }
-
-        public void ExecuteOkay(object parameter) { }
-
-        public void ExecuteCancel(object parameter) { }
     }
 }

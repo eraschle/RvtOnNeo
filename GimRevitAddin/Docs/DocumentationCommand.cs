@@ -44,35 +44,38 @@ namespace Gim.Revit.Addin.Docs
 
             try
             {
-                var viewModel = new DocumentationViewModel();
-                var view = new DocumentationView { DataContext = viewModel };
-                var dialog = new WpfDialog(view);
-
+                var setting = new DocumentationSetting();
                 var manager = new CreateJournalManager(commandData);
-                if (manager.CanReadData == false)
+                if (manager.ReadJournalData)
                 {
-                    dialog.ShowDialog();
-                }
-                if (manager.CanReadData || dialog.DialogResult == true)
-                {
-                    var setting = viewModel.Settings;
-                    var tran = new Transaction(doc, "Family Documentation");
-                    try
-                    {
-                        tran.Start();
-                        manager.CreateDocumentation(doc, setting);
-                        tran.Commit();
-                        return Result.Succeeded;
-                    }
-                    catch (Exception ex)
-                    {
-                        tran.RollBack();
-                        throw ex;
-                    }
+                    setting.SetSettings(commandData.JournalData);
                 }
                 else
                 {
-                    return Result.Cancelled;
+                    var viewModel = new DocumentationViewModel();
+                    var view = new DocumentationView { DataContext = viewModel };
+                    var dialog = new WpfDialog(view);
+                    dialog.ShowDialog();
+
+                    if (dialog.DialogResult != true)
+                    {
+                        return Result.Cancelled;
+                    }
+                    setting = viewModel.Settings;
+                }
+
+                var tran = new Transaction(doc, "Family Documentation");
+                try
+                {
+                    tran.Start();
+                    manager.CreateDocumentation(doc, setting);
+                    tran.Commit();
+                    return Result.Succeeded;
+                }
+                catch (Exception ex)
+                {
+                    tran.RollBack();
+                    throw ex;
                 }
             }
             catch (Exception ex)

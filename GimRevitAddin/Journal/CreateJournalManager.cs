@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Gim.Revit.Documentation;
 using Gim.Revit.Helper.Journal;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Gim.Revit.Addin.Journal
 {
@@ -13,7 +13,7 @@ namespace Gim.Revit.Addin.Journal
     public class CreateJournalManager
     {
         private readonly ExternalCommandData commandData;
-        public bool CanReadData { get; private set; }
+        public bool ReadJournalData { get; private set; }
 
         // Methods
         /// <summary>
@@ -23,7 +23,7 @@ namespace Gim.Revit.Addin.Journal
         public CreateJournalManager(ExternalCommandData externalCommandData)
         {
             commandData = externalCommandData;
-            CanReadData = (0 < externalCommandData.JournalData.Count) ? true : false;
+            ReadJournalData = (0 < externalCommandData.JournalData.Count) ? true : false;
         }
 
         /// <summary>
@@ -33,43 +33,33 @@ namespace Gim.Revit.Addin.Journal
         public void CreateDocumentation(Document document, DocumentationSetting setting)
         {
             var manager = new DocumentationManager();
-            if (CanReadData)
+            if (ReadJournalData)
             {
                 setting.SetSettings(commandData.JournalData);
-                setting = ReadJournalData(setting);
-                if (setting.DocumentFormat == DocumentFormat.Json)
-                {
-                    manager.CreateJsonFamilyDoc(document, setting);
-                }
-                else if (setting.DocumentFormat == DocumentFormat.Web)
-                {
-                    manager.CreateWebFamilyDoc(document, setting);
-                }
+            }
 
-                if (setting.DocumentFormat != DocumentFormat.None)
-                {
-                    JournalHelper.KillCurrentProcess();
-                }
+            switch (setting.DocumentFormat)
+            {
+                case DocumentFormat.Json:
+                    manager.CreateJsonFamilyDoc(document, setting);
+                    break;
+                case DocumentFormat.Web:
+                    manager.CreateWebFamilyDoc(document, setting);
+                    break;
+                case DocumentFormat.None:
+                    break;
+            }
+
+            manager.CreateFbx(document, setting);
+
+            if (ReadJournalData)
+            {
+                JournalHelper.KillCurrentProcess();
             }
             else
             {
-                if (setting.DocumentFormat == DocumentFormat.Json)
-                {
-                    manager.CreateJsonFamilyDoc(document, setting);
-                }
                 WriteJournalData(setting);
             }
-        }
-
-        /// <summary>
-        /// Read the journal data from the journal.
-        /// All journal data is stored in commandData.Data.
-        /// </summary>
-        private DocumentationSetting ReadJournalData(DocumentationSetting setting)
-        {
-            var journalData = commandData.JournalData;
-            setting.SetSettings(journalData);
-            return setting;
         }
 
         /// <summary>

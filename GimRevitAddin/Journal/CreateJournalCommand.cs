@@ -26,29 +26,25 @@ namespace Gim.Revit.Addin.Journal
                 var dialog = new WpfDialog(view);
                 dialog.ShowDialog();
 
-                if (dialog.DialogResult == true)
-                {
-                    var application = commandData.Application.Application;
-                    var manager = new FileCreationManager();
-                    var settings = viewModel.Setting;
-                    settings.SetRevitDirectory(application);
-                    var journalFiles = new List<string>();
-                    var count = 0;
-                    foreach (var file in settings.DocumentationFiles)
-                    {
-                        settings.CurrentFile = file;
-                        settings.FileCount = ++count;
-                        manager.CreateJournal(settings);
-                    }
-
-                    manager.CreateBatch(settings);
-                    manager.CreateAddinFile(settings);
-                    return Result.Succeeded;
-                }
-                else
+                if (dialog.DialogResult == false)
                 {
                     return Result.Cancelled;
                 }
+
+                var manager = new FileCreationManager();
+                var settings = viewModel.Setting;
+                settings.SetRevitDirectory(commandData);
+                var count = 0;
+                foreach (var file in settings.DocumentationFiles)
+                {
+                    settings.CurrentFile = file;
+                    settings.FileCount = ++count;
+                    manager.CreateJournal(settings);
+                }
+
+                manager.CreateBatch(settings);
+                manager.CreateAddinFile(settings);
+                return Result.Succeeded;
             }
             catch (Exception ex)
             {

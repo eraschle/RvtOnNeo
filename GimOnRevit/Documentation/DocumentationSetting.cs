@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Gim.Revit.Helper.FileHelper;
+using static Gim.Domain.Helpers.FileHelper;
 
 namespace Gim.Revit.Addin.Journal
 {
@@ -18,6 +18,7 @@ namespace Gim.Revit.Addin.Journal
         internal const string URL_KEY = "Url";
         internal const string API_KEY = "APiKey";
         internal const string NEW_LINE_SYMBOL = "LineEnding";
+        internal const string EXPORT_FBX = "Fbx";
 
         public DocumentFormat DocumentFormat { get; set; }
 
@@ -30,12 +31,14 @@ namespace Gim.Revit.Addin.Journal
         public string WebUrl { get; set; }
 
         public string ApiKey { get; set; }
+        public bool ExportFbx { get; set; }
 
         public IDictionary<string, string> GetJournalData()
         {
             var journalData = new Dictionary<string, string>
             {
                 { DOCUMENTATION_KEY, DocumentFormat.ToString() },
+                { EXPORT_FBX, ExportFbx.ToString() },
                 { FORMAT_JSON_KEY, FormatJson.ToString() },
                 { URL_KEY, WebUrl },
                 { API_KEY, ApiKey },
@@ -47,10 +50,17 @@ namespace Gim.Revit.Addin.Journal
         public void SetSettings(IDictionary<string, string> journalData)
         {
             SetDocumentFormat(journalData);
+            SetExportFbx(journalData);
             SetJsonFormat(journalData);
             SetUrl(journalData);
             SetApiKey(journalData);
             SetNewLineSymbol(journalData);
+        }
+
+        private void SetExportFbx(IDictionary<string, string> journalData)
+        {
+            var formatValue = GetSpecialData(journalData, EXPORT_FBX);
+            FormatJson = Convert.ToBoolean(formatValue);
         }
 
         private void SetDocumentFormat(IDictionary<string, string> journalData)

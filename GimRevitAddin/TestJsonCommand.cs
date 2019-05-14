@@ -41,8 +41,8 @@ namespace Gim.Revit.Addin
                 {
                     tran.Start();
                     controller.CreateCategories(document);
-                    //controller.CreateBips(document);
-                    //controller.CreateUnits(document);
+                    controller.CreateBips(document);
+                    controller.CreateUnits(document);
                     tran.Commit();
                     return Result.Succeeded;
                 }

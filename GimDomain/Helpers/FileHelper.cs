@@ -3,30 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Gim.Revit.Helper
+namespace Gim.Domain.Helpers
 {
     public class FileHelper
     {
 
-        public enum NewLine { None, Windows, Linux, MacOs }
+        public enum NewLine { None, Windows, Linux }
 
         public static IDictionary<NewLine, string> NewLineSymbols { get; private set; }
 
-        public static string Convert(string content, NewLine fromSymbol, NewLine toSymbol)
-        {
-            if (string.IsNullOrEmpty(content)) { return content; }
-
-            return content.Replace(NewLineSymbols[fromSymbol],
-                                   NewLineSymbols[toSymbol]);
-        }
-
-        public static bool ContainSymbol(string content, NewLine symbol)
-        {
-            return string.IsNullOrEmpty(content) == false
-                && content.Contains(NewLineSymbols[symbol]);
-        }
-
         private static readonly HashSet<char> invalidPathChars = new HashSet<char> { '/' };
+
+        private static readonly Encoding defaultEncoding = new UTF8Encoding(false);
 
         static FileHelper()
         {
@@ -35,7 +23,6 @@ namespace Gim.Revit.Helper
                 { NewLine.None, string.Empty },
                 { NewLine.Windows, "\r\n" },
                 { NewLine.Linux, "\n" },
-                { NewLine.MacOs, "\n" }
             };
         }
 
@@ -63,7 +50,6 @@ namespace Gim.Revit.Helper
             try
             {
                 var invalidChars = Path.GetInvalidFileNameChars();
-                //var fileName = Path.GetFileName(filePath);
                 return IsValid(filePath, invalidChars, out invalidIndexCharDict);
             }
             catch (Exception)
@@ -118,37 +104,56 @@ namespace Gim.Revit.Helper
             return filePath.Replace(fileName, $"{sourceName}.{extension}");
         }
 
-        /// <summary>
-        /// Deletes the journal file if it already exists.
-        /// </summary>
-        /// <param name="journalFilePath">The path of the generated journal file.</param>
-        private static void DeleteFile(string journalFilePath)
+        public static bool DeleteFile(string journalFilePath)
         {
-            if (File.Exists(journalFilePath))
+            if (File.Exists(journalFilePath) == false) { return false; }
+
+            try
             {
                 File.Delete(journalFilePath);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
-        /// <summary>
-        /// Writes the journal file.
-        /// </summary>
-        /// <param name="filePath">The path of the generated journal file.</param>
-        /// <param name="fileContent">The string for the journal file.</param>
-        public static void WriteFile(string filePath, string fileContent)
+        public static void WriteFile(string filePath, string fileContent, Encoding encoding = null)
         {
             DeleteFile(filePath);
-            var encoding = new UTF8Encoding(false);
-            using (var tw = new StreamWriter(filePath, true, encoding))
+            var fromLineEnd = NewLineSymbols[NewLine.Windows];
+            var toLineEnd = NewLineSymbols[NewLine.Linux];
+
+            var splits = new List<string> { fromLineEnd }.ToArray();
+            var allLines = fileContent.Split(splits, StringSplitOptions.None);
+            try
             {
-                try
+                if (encoding is null)
                 {
-                    tw.Write(fileContent);
+                    encoding = defaultEncoding;
                 }
-                finally
+
+                using (var writer = new StreamWriter(filePath, append: false, encoding))
                 {
-                    tw.Flush();
+                    writer.NewLine = toLineEnd;
+                    for (var idx = 0; idx < allLines.Length; idx++)
+                    {
+                        var line = allLines[idx];
+                        if (idx < allLines.Length - 1)
+                        {
+                            writer.WriteLine(line);
+                        }
+                        else
+                        {
+                            writer.Write(line);
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"File {filePath}", ex);
             }
         }
     }

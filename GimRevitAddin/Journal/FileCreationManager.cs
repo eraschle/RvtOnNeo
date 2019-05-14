@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.RevitAddIns;
+using Gim.Domain.Helpers;
 using Gim.Revit.Helper;
 using Gim.Revit.Helper.Journal;
 
