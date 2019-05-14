@@ -3,9 +3,9 @@ using Gim.Revit.Documentation.Model;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
-using Gim.Revit.TestJson;
 using Gim.Domain.Helpers;
 using Gim.Domain.Writer;
+using Gim.Revit.Documentation.Wrapper;
 
 namespace Gim.Revit
 {
@@ -18,7 +18,7 @@ namespace Gim.Revit
         private string GetFilePath(string outputPath, string fileNamePrefix)
         {
             var fileName = $"{fileNamePrefix}_{jsonFormat.ToString()}.json";
-            return writer.GetFilePath(outputPath, fileName);
+            return FileHelper.GetRepairedFilePath(outputPath, fileName);
         }
 
         public void CreateCategories(Rvt.Document document)
@@ -27,7 +27,8 @@ namespace Gim.Revit
             var objectNames = CategoryNames(jsonObjects.Categories);
             writer.WrtieFiles(objectNames, jsonObjects.Categories);
         }
-        private IList<string> CategoryNames(IList<CategoryJsonWrapper> adapters)
+
+        private IList<string> CategoryNames(IList<CategoryWrapper> adapters)
         {
             var names = new List<string>();
             foreach (var adapter in adapters)
@@ -44,7 +45,7 @@ namespace Gim.Revit
         private CategoriesWrapper CategoryJsonObjectList(Rvt.Document document)
         {
             var rvtCategories = Enum.GetValues(typeof(Rvt.BuiltInCategory));
-            var adapters = new List<CategoryJsonWrapper>();
+            var adapters = new List<CategoryWrapper>();
             foreach (Rvt.BuiltInCategory bic in rvtCategories)
             {
                 Rvt.Category category = null;
@@ -54,7 +55,7 @@ namespace Gim.Revit
                 if (category is null) { continue; }
 
                 var adapter = new CategoryAdapter(category);
-                var wrapper = new CategoryJsonWrapper { Category = adapter };
+                var wrapper = new CategoryWrapper { Category = adapter };
                 adapters.Add(wrapper);
             }
             return new CategoriesWrapper(adapters);
@@ -67,15 +68,15 @@ namespace Gim.Revit
             writer.WrtieFile(fileName, jsonObject);
         }
 
-        private IList<BipParameter> BipJsonObject()
+        private IList<BipParameterAdapter> BipJsonObject()
         {
             var bipParameters = Enum.GetValues(typeof(Rvt.BuiltInParameter));
-            var adapters = new List<BipParameter>();
+            var adapters = new List<BipParameterAdapter>();
             foreach (Rvt.BuiltInParameter bip in bipParameters)
             {
                 try
                 {
-                    var adapter = new BipParameter
+                    var adapter = new BipParameterAdapter
                     {
                         RevitId = bip.GetHashCode(),
                         RevitName = bip.ToString(),
@@ -130,16 +131,6 @@ namespace Gim.Revit
                 unitTypes.Add(unitType);
             }
             return unitTypes;
-        }
-    }
-
-    public class CategoriesWrapper
-    {
-        public IList<CategoryJsonWrapper> Categories { get; set; }
-
-        public CategoriesWrapper(IList<CategoryJsonWrapper> categories)
-        {
-            Categories = categories;
         }
     }
 }

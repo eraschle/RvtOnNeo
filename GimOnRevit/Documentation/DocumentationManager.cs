@@ -7,6 +7,7 @@ using Gim.Domain.Writer;
 using Gim.Revit.Addin.Journal;
 using Gim.Revit.Documentation.Json;
 using Gim.Revit.Documentation.Model;
+using Gim.Revit.Documentation.Wrapper;
 using Gim.Revit.Helper;
 using Newtonsoft.Json;
 
@@ -14,32 +15,29 @@ namespace Gim.Revit.Documentation
 {
     public class DocumentationManager
     {
-        private GimJsonWriter writer = new GimJsonWriter();
+        private readonly GimJsonWriter writer = new GimJsonWriter();
 
-        public string CreateJson(Document document, DocumentationSetting setting)
+        private ICollection<JsonConverter> GetConverters(DocumentationSetting setting)
         {
-            var famDoc = new FamilyAdapter(document.OwnerFamily);
-            var format = setting.FormatJson ? Formatting.Indented : Formatting.None;
-            if (setting.WrapGimObjects)
-            {
-                var converters = new List<JsonConverter> {
+            return setting.WrapGimObjects
+                ? new List<JsonConverter> {
                     new ParameterJsonConverter(),
                     new FamilyTypeJsonConverter()
-                };
-                var wrapper = new FamilyJsonWarpper(famDoc);
-                return JsonConvert.SerializeObject(wrapper, format, converters.ToArray());
-            }
-            else
-            {
-                return JsonConvert.SerializeObject(famDoc, format);
-            }
+                }
+                : null;
         }
 
         public void CreateJsonFamilyDoc(Document document, DocumentationSetting setting)
         {
-            var jsonString = CreateJson(document, setting);
+            object jsonObject = new FamilyAdapter(document.OwnerFamily);
+            var converters = GetConverters(setting);
+            if (setting.WrapGimObjects)
+            {
+                jsonObject = new FamilyWarpper(jsonObject as FamilyAdapter);
+            }
+
             var filePath = FileHelper.ChangeExtension(document.PathName, "json");
-            File.WriteAllText(filePath, jsonString);
+            writer.WrtieFile(filePath, jsonObject, converters);
         }
 
         public void CreateWebFamilyDoc(Document document, DocumentationSetting setting)
@@ -53,7 +51,8 @@ namespace Gim.Revit.Documentation
 
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
-                var json = CreateJson(document, setting);
+                var converters = GetConverters(setting);
+                var json = writer.CreateJson(document, converters);
 
                 streamWriter.Write(json);
                 streamWriter.Flush();

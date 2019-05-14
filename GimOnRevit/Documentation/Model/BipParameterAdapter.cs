@@ -1,6 +1,7 @@
-﻿namespace Gim.Revit.TestJson
+﻿namespace Gim.Revit.Documentation.Model
 {
-    public class BipParameter
+
+    public class BipParameterAdapter
     {
         public int RevitId { get; set; }
         public string RevitName { get; set; }

@@ -26,6 +26,14 @@ namespace Gim.Domain.Helpers
             };
         }
 
+        public static string GetRepairedFilePath(string dirctoryPath, string filePath)
+        {
+            filePath = RepairInvalidFileName(filePath);
+            var directory = RepairInvalidPathName(dirctoryPath);
+            return Path.Combine(directory, filePath);
+        }
+
+
         public static bool IsValid(string filePath, char[] invalidChars, out IDictionary<int, char> invalidIndexCharDict)
         {
             var filePathChars = filePath.ToCharArray();

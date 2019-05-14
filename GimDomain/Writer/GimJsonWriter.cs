@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
+using System.Linq;
 
 namespace Gim.Domain.Writer
 {
@@ -11,40 +11,40 @@ namespace Gim.Domain.Writer
         private readonly Formatting jsonFormat = Formatting.Indented;
         private const string nullValue = "\"NULL\"";
 
-        public string GetFilePath(string dirctoryPath, string filePath)
-        {
-            filePath = FileHelper.RepairInvalidFileName(filePath);
-            var directory = FileHelper.RepairInvalidPathName(dirctoryPath);
-            return Path.Combine(directory, filePath);
-        }
-
-
-        public void WrtieFiles<T>(IList<string> filePaths, IList<T> jsonObjects) where T : class
+        public void WrtieFiles<T>(
+            IList<string> filePaths, IList<T> jsonObjects,
+            ICollection<JsonConverter> converters = null) where T : class
         {
             for (var idx = 0; idx < jsonObjects.Count; idx++)
             {
-                WrtieFile(filePaths[idx], jsonObjects[idx]);
+                WrtieFile(filePaths[idx], jsonObjects[idx], converters);
             }
         }
 
-        public void WrtieFile(string filePath, object jsonObject)
+        public void WrtieFile(string filePath, object jsonObject,
+            ICollection<JsonConverter> converters = null)
         {
-            var jsonString = CreateJson(jsonObject);
+            var jsonString = CreateJson(jsonObject, converters);
             jsonString = string.IsNullOrEmpty(jsonString) ? jsonString
                 : jsonString.Replace("null", nullValue);
 
             FileHelper.WriteFile(filePath, jsonString);
         }
 
-        private string CreateJson(object serialzeObject)
+        public string CreateJson(object serialzeObject, ICollection<JsonConverter> converters = null)
         {
             var setting = new JsonSerializerSettings
             {
                 Formatting = jsonFormat,
                 NullValueHandling = NullValueHandling.Ignore,
                 StringEscapeHandling = StringEscapeHandling.Default,
-                Culture = CultureInfo.CurrentCulture
+                Culture = CultureInfo.CurrentCulture,
             };
+
+            if (converters != null && converters.Count > 0)
+            {
+                setting.Converters = converters.ToArray();
+            }
             return JsonConvert.SerializeObject(serialzeObject, setting);
         }
     }

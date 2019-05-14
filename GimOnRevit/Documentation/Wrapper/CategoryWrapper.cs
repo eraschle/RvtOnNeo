@@ -1,8 +1,8 @@
 ﻿using Gim.Revit.Documentation.Model;
 
-namespace Gim.Revit.TestJson
+namespace Gim.Revit.Documentation.Wrapper
 {
-    public class CategoryJsonWrapper
+    public class CategoryWrapper
     {
         public Category Category { get; set; }
     }

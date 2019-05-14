@@ -1,11 +1,11 @@
 ﻿using Gim.Revit.Documentation.Model;
 
-namespace Gim.Revit.Documentation.Json
+namespace Gim.Revit.Documentation.Wrapper
 {
-    public class FamilyJsonWarpper
+    public class FamilyWarpper
     {
         public Family Family { get; set; }
-        public FamilyJsonWarpper(FamilyAdapter familyAdapter)
+        public FamilyWarpper(FamilyAdapter familyAdapter)
         {
             Family = familyAdapter;
         }

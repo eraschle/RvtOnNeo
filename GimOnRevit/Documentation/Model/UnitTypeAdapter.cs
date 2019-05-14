@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Gim.Revit.TestJson
+namespace Gim.Revit.Documentation.Model
 {
     public class UnitType
     {
