@@ -54,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Documentation\Json\FamilyJsonWarpper.cs" />
+    <Compile Include="Documentation\Wrapper\FamilyWarpper.cs" />
     <Compile Include="Documentation\Json\FamilyTypeJsonConverter.cs" />
     <Compile Include="Documentation\Json\ParameterJsonConverter.cs" />
     <Compile Include="Documentation\Json\AGenericJsonConverter.cs" />
@@ -75,10 +75,11 @@
     <Compile Include="Helper\ViewHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RevitFile.cs" />
-    <Compile Include="TestJson\BipParameter.cs" />
-    <Compile Include="TestJson\CategoryJsonWrapper.cs" />
+    <Compile Include="Documentation\Model\BipParameterAdapter.cs" />
+    <Compile Include="Documentation\Wrapper\CategoriesWrapper.cs" />
+    <Compile Include="Documentation\Wrapper\CategoryWrapper.cs" />
     <Compile Include="TestJson\TestJsonController.cs" />
-    <Compile Include="TestJson\UnitType.cs" />
+    <Compile Include="Documentation\Model\UnitTypeAdapter.cs" />
     <Compile Include="Wrapper\IParameterValueWrapper.cs" />
     <Compile Include="Wrapper\FamilyParameterValueWrapper.cs" />
     <Compile Include="Wrapper\ParameterValueWrapper.cs" />
