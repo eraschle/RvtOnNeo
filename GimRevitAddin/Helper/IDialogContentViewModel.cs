@@ -1,6 +1,8 @@
-﻿namespace Gim.Revit.Addin.Helper
+﻿using System.ComponentModel;
+
+namespace Gim.Revit.Addin.Helper
 {
-    public interface IDialogContentViewModel
+    public interface IDialogContentViewModel : INotifyPropertyChanged
     {
         object CommandParameter { get; set; }
         bool CanExecute(object parameter);

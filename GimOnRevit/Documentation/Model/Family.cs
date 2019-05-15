@@ -25,6 +25,8 @@ namespace Gim.Revit.Documentation.Model
 
         public virtual string DimensionRound { get; set; }
 
+        public virtual string LibraryPath { get; set; }
+
         public virtual IList<FamilyParameter> Parameters { get; set; }
 
         public virtual IList<FamilyType> FamilyTypes { get; set; }

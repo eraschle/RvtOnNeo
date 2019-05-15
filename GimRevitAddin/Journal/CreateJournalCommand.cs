@@ -4,7 +4,6 @@ using Autodesk.Revit.UI;
 using Gim.Revit.Addin.Helper;
 using Gim.Revit.Addin.Journal.View;
 using System;
-using System.Collections.Generic;
 
 namespace Gim.Revit.Addin.Journal
 {
@@ -18,10 +17,9 @@ namespace Gim.Revit.Addin.Journal
             try
             {
                 var viewModel = new CreateJournalViewModel();
-                var view = new CreateJournalView();
+                var view = new CreateJournalView { DataContext = viewModel };
 
                 viewModel.SetDocumentationViewModel(view.DocumentationViewModel);
-                view.DataContext = viewModel;
 
                 var dialog = new WpfDialog(view);
                 dialog.ShowDialog();

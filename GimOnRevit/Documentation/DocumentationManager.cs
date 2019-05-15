@@ -29,14 +29,15 @@ namespace Gim.Revit.Documentation
 
         public void CreateJsonFamilyDoc(Document document, DocumentationSetting setting)
         {
-            object jsonObject = new FamilyAdapter(document.OwnerFamily);
+            object jsonObject = new FamilyAdapter(document.OwnerFamily, setting.LibraryRoot);
             var converters = GetConverters(setting);
             if (setting.WrapGimObjects)
             {
                 jsonObject = new FamilyWarpper(jsonObject as FamilyAdapter);
             }
 
-            var filePath = FileHelper.ChangeExtension(document.PathName, "json");
+            var filePath = setting.CreateOutputFilePath(document.PathName, "json");
+            writer.Formating = setting.FormatJson;
             writer.WrtieFile(filePath, jsonObject, converters);
         }
 
@@ -52,6 +53,8 @@ namespace Gim.Revit.Documentation
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 var converters = GetConverters(setting);
+                //TODO: Change if a web request depends on the format...
+                writer.Formating = false;
                 var json = writer.CreateJson(document, converters);
 
                 streamWriter.Write(json);
@@ -70,24 +73,20 @@ namespace Gim.Revit.Documentation
         {
             if (setting.ExportFbx == false) { return; }
 
-            var folder = GetFolderPath(document);
-            var name = GetFbxFileName(document);
             var views = Get3dViewSet(document);
             var option = GetOptions();
-            document.Export(folder, name, views, option);
+
+            var filePath = GetFbxFileName(document, setting);
+            FileHelper.DeleteFile(filePath);
+            var folderPath = Path.GetDirectoryName(filePath);
+            var fileName = Path.GetFileName(filePath);
+            document.Export(folderPath, fileName, views, option);
         }
 
-        private string GetFbxFileName(Document document)
+        private string GetFbxFileName(Document document, DocumentationSetting setting)
         {
-            var fileName = FileHelper.ChangeExtension(document.PathName, "fbx");
-            FileHelper.DeleteFile(fileName);
-            return Path.GetFileName(fileName);
-        }
-
-        private string GetFolderPath(Document document)
-        {
-            var fileName = document.PathName;
-            return Path.GetDirectoryName(fileName);
+            var filePath = setting.CreateOutputFilePath(document.PathName, "fbx");
+            return filePath;
         }
 
         private ViewSet Get3dViewSet(Document document)

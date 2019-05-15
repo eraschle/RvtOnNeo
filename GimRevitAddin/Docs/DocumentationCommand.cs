@@ -52,7 +52,7 @@ namespace Gim.Revit.Addin.Docs
                 }
                 else
                 {
-                    var viewModel = new DocumentationViewModel();
+                    var viewModel = new DocumentationViewModel(doc);
                     var view = new DocumentationView { DataContext = viewModel };
                     var dialog = new WpfDialog(view);
                     dialog.ShowDialog();

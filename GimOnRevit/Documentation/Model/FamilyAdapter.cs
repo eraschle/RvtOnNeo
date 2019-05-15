@@ -9,9 +9,12 @@ namespace Gim.Revit.Documentation.Model
     public class FamilyAdapter : Family
     {
         private readonly Rvt.Family family;
-        public FamilyAdapter(Rvt.Family rvtFamily)
+        private readonly string libraryRootPath;
+
+        public FamilyAdapter(Rvt.Family rvtFamily, string libraryPath)
         {
             family = rvtFamily;
+            libraryRootPath = $"{libraryPath}{Path.DirectorySeparatorChar}";
         }
 
         public override string Name
@@ -103,6 +106,17 @@ namespace Gim.Revit.Documentation.Model
                 var bip = Rvt.BuiltInParameter.FAMILY_CONTENT_PART_TYPE;
                 return family.get_Parameter(bip).AsValueString();
             }
+        }
+
+        public override string LibraryPath
+        {
+            get
+            {
+                var docPath = family.Document.PathName;
+                return docPath.Replace(libraryRootPath, "");
+            }
+
+            set { }
         }
 
         private bool ConvertToBool(Rvt.BuiltInParameter bip)

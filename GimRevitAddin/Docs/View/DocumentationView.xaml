@@ -7,41 +7,44 @@
     <UserControl.DataContext>
         <local:DocumentationViewModel/>
     </UserControl.DataContext>
-    <Grid Margin="2">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="200" Width="1*"/>
-            <ColumnDefinition MinWidth="300" Width="1*"/>
-        </Grid.ColumnDefinitions>
+    <StackPanel Margin="2">
+        <Grid Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="100" Width="1*"/>
+                <ColumnDefinition MinWidth="300" Width="4*"/>
+                <ColumnDefinition MinWidth="100" Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Library Root"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   VerticalContentAlignment="Center"/>
+            <TextBox Text="{Binding LibraryRoot}"
+                     IsManipulationEnabled="False"
+                     Grid.Column="1" Grid.Row="0" Margin="2"
+                     HorizontalAlignment="Stretch" 
+                     VerticalAlignment="Stretch"
+                     VerticalContentAlignment="Center"/>
+            <Button Content="Choose" 
+                    Command="{Binding LibraryRootCommand}"
+                    Grid.Column="3" Grid.Row="0" Margin="2"/>
+        </Grid>
         <GroupBox Header="Optional Exports" 
-                  Grid.Row="0" Grid.Column="0" 
-                  Grid.ColumnSpan="2" Margin="2"
+                  Margin="2"
                   HorizontalAlignment="Stretch" 
                   VerticalAlignment="Stretch">
-            <StackPanel Orientation="Horizontal"
+            <StackPanel Margin="2"
                         VerticalAlignment="Stretch"
                         HorizontalAlignment="Stretch">
-                <CheckBox Content="Export FL" Margin="2"
-                          IsChecked="{Binding WindowLineEnding, 
-                                              FallbackValue=true}"/>
-                <CheckBox Content="Template: Some name" Margin="2"
-                          IsChecked="{Binding ViewModelProperty}"
-                          IsEnabled="False"/>
+                <CheckBox Content="Export FBX" Margin="2"
+                          IsChecked="{Binding ExportFbx, FallbackValue=true}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Line Ending" 
-                  IsEnabled="{Binding ElementName=rdbJson, 
-                                      Path=IsChecked}"
-                  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                  HorizontalAlignment="Stretch" Margin="2"
+                  Margin="2"
+                  HorizontalAlignment="Stretch" 
                   VerticalAlignment="Stretch">
-            <Grid>
+            <Grid Margin="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="50" Width="1*"/>
                     <ColumnDefinition MinWidth="50" Width="1*"/>
                     <ColumnDefinition MinWidth="50" Width="1*"/>
                 </Grid.ColumnDefinitions>
@@ -55,68 +58,89 @@
                              IsChecked="{Binding LinuxLineEnding}"
                              Grid.Column="1"
                              Margin="2"/>
-                <RadioButton Content="Mac OS (\n)" 
-                             GroupName="LineEnding"
-                             IsChecked="{Binding MacOsLineEnding}"
-                             Grid.Column="2" Margin="2"/>
             </Grid>
         </GroupBox>
-        <StackPanel Grid.Row="2" Grid.Column="0" Margin="2">
-            <RadioButton x:Name="rdbJson"
-                         Content="Json" 
-                         GroupName="Output"
-                         IsChecked="{Binding IsJson, FallbackValue=true}"/>
-            <GroupBox Header="Options" 
-                      IsEnabled="{Binding ElementName=rdbJson, Path=IsChecked}"
-                      HorizontalAlignment="Stretch" 
-                      VerticalAlignment="Stretch">
-                <Grid Margin="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <CheckBox Content="Format Json" 
-                              IsChecked="{Binding FormatJson, FallbackValue=true}"
-                              Margin="2"/>
-
-                </Grid>
-            </GroupBox>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="3" Margin="2">
-            <RadioButton x:Name="rdbWeb"
-                         Content="Web" GroupName="Output"
-                         IsChecked="{Binding IsWeb}"/>
-            <GroupBox Header="Options" 
-                      IsEnabled="{Binding ElementName=rdbWeb, Path=IsChecked}"
-                      HorizontalAlignment="Stretch" 
-                      VerticalAlignment="Stretch">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="60" Width="1*"/>
-                        <ColumnDefinition Width="5*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Url" 
-                           Grid.Column="0" Grid.Row="0"
-                           HorizontalAlignment="Stretch" 
-                           VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding WebUrl}" 
-                             Grid.Column="1" Grid.Row="0" Margin="2"
-                             HorizontalAlignment="Stretch" 
-                             VerticalAlignment="Stretch"/>
-                    <Label Content="Api Key" 
-                           Grid.Column="0" Grid.Row="1"
-                           HorizontalAlignment="Stretch" 
-                           VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding ApiKey}" 
-                             Grid.Column="1" Grid.Row="1" Margin="2"
-                             HorizontalAlignment="Stretch" 
-                             VerticalAlignment="Stretch"/>
-                </Grid>
-            </GroupBox>
-        </StackPanel>
-    </Grid>
+        <GroupBox Header="Output Device" 
+                  Margin="2"
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch">
+            <StackPanel>
+                <StackPanel Margin="2">
+                    <RadioButton x:Name="rdbJson"
+                                 Content="Json" 
+                                 GroupName="Output"
+                                 IsChecked="{Binding IsJson, FallbackValue=true}"/>
+                    <GroupBox Header="Options" 
+                              IsEnabled="{Binding ElementName=rdbJson, Path=IsChecked}"
+                              HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Stretch">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="100" Width="1*"/>
+                                <ColumnDefinition MinWidth="300" Width="4*"/>
+                                <ColumnDefinition MinWidth="100" Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Output Directory" 
+                                   Grid.Column="0" Grid.Row="0"
+                                   VerticalAlignment="Center"
+                                   VerticalContentAlignment="Center"/>
+                            <TextBox Text="{Binding OutputDirectory}"
+                                     IsManipulationEnabled="False"
+                                     Grid.Column="1" Grid.Row="0" Margin="2"
+                                     HorizontalAlignment="Stretch" 
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Center"/>
+                            <Button Content="Choose" 
+                                    Command="{Binding OutputDirectoryCommand}"
+                                    Grid.Column="3" Grid.Row="0" Margin="2"/>
+                            <CheckBox Content="Format Json" 
+                                      Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                                      IsChecked="{Binding FormatJson, FallbackValue=true}"
+                                      Margin="2"/>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+                <StackPanel Margin="2">
+                    <RadioButton x:Name="rdbWeb"
+                                 Content="Web" GroupName="Output"
+                                 IsChecked="{Binding IsWeb}"/>
+                    <GroupBox Header="Options" 
+                              IsEnabled="{Binding ElementName=rdbWeb, Path=IsChecked}"
+                              HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Stretch">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="60" Width="1*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Url" 
+                                   Grid.Column="0" Grid.Row="0"
+                                   HorizontalAlignment="Stretch" 
+                                   VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding WebUrl}" 
+                                     Grid.Column="1" Grid.Row="0" Margin="2"
+                                     HorizontalAlignment="Stretch" 
+                                     VerticalAlignment="Stretch"/>
+                            <Label Content="Api Key" 
+                                   Grid.Column="0" Grid.Row="1"
+                                   HorizontalAlignment="Stretch" 
+                                   VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding ApiKey}" 
+                                     Grid.Column="1" Grid.Row="1" Margin="2"
+                                     HorizontalAlignment="Stretch" 
+                                     VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
 </UserControl>

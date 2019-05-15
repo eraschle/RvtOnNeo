@@ -16,9 +16,6 @@ namespace Gim.Revit.Addin.Journal.View
             sourcePath = Directories.UserHome;
             destinationPath = Directories.UserHome;
 
-            SourceDirectoryCommand = new RelayCommand(SelectSource);
-            DestinationDirectoryCommand = new RelayCommand(SelectDestination);
-
             allowedFiles = new ObservableCollection<RevitFile>();
             forbiddenFiles = new ObservableCollection<RevitFile>();
             recursive = true;
@@ -37,7 +34,7 @@ namespace Gim.Revit.Addin.Journal.View
             get { return sourcePath; }
             set
             {
-                if (value.Equals(sourcePath)) { return; }
+                if (sourcePath.Equals(value)) { return; }
 
                 sourcePath = value;
                 NotifyPropertyChanged();
@@ -50,23 +47,33 @@ namespace Gim.Revit.Addin.Journal.View
             get { return destinationPath; }
             set
             {
-                if (value.Equals(destinationPath)) { return; }
+                if (destinationPath.Equals(value)) { return; }
 
                 destinationPath = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public RelayCommand SourceDirectoryCommand { get; }
-
-        public RelayCommand DestinationDirectoryCommand { get; }
+        public RelayCommand SourceDirectoryCommand
+        {
+            get { return new RelayCommand(SelectSource); }
+        }
 
         private void SelectSource(object parameter)
         {
-            SourcePath = SelectDirectory(sourcePath);
+            SourcePath = SelectDirectory(sourcePath, false);
             RefreshFileInfo();
         }
 
+        public RelayCommand DestinationDirectoryCommand
+        {
+            get { return new RelayCommand(SelectDestination); }
+        }
+
+        private void SelectDestination(object parameter)
+        {
+            DestinationPath = SelectDirectory(destinationPath, true);
+        }
         private void RefreshFileInfo()
         {
             var setting = Setting;
@@ -75,24 +82,18 @@ namespace Gim.Revit.Addin.Journal.View
             FileOverview = string.Empty;
         }
 
-        private void SelectDestination(object parameter)
+        private string SelectDirectory(string currentDirectory, bool newFolderButton)
         {
-            DestinationPath = SelectDirectory(destinationPath, true);
-        }
-
-        private string SelectDirectory(string currentDirectory, bool newButton = false)
-        {
-            var directory = currentDirectory;
             using (var dialog = new FolderBrowserDialog())
             {
                 dialog.SelectedPath = currentDirectory;
-                dialog.ShowNewFolderButton = newButton;
+                dialog.ShowNewFolderButton = newFolderButton;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    directory = dialog.SelectedPath;
+                    currentDirectory = dialog.SelectedPath;
                 }
             }
-            return directory;
+            return currentDirectory;
         }
 
         private bool recursive;
@@ -170,11 +171,18 @@ namespace Gim.Revit.Addin.Journal.View
             return new ObservableCollection<RevitFile>(list);
         }
 
-        public object CommandParameter { get; set; }
+        public object CommandParameter
+        {
+            get { return SourcePath; }
+            set { }
+        }
 
         public bool CanExecute(object parameter)
         {
+            var currentPath = parameter as string;
+            var libraryRoot = docuViewModel.LibraryRoot;
             var canExecute = AllowedFiles.Count > 0;
+                // && DirectoryHelper.IsSameOrSub(libraryRoot, currentPath);
             return canExecute && docuViewModel.CanExecute(parameter);
         }
 

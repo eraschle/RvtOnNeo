@@ -1,6 +1,10 @@
-﻿using Gim.Domain.Helpers.Event;
+﻿using Autodesk.Revit.DB;
+using Gim.Domain.Helpers;
+using Gim.Domain.Helpers.Event;
 using Gim.Revit.Addin.Helper;
 using Gim.Revit.Addin.Journal;
+using System.IO;
+using System.Windows.Forms;
 using static Gim.Domain.Helpers.FileHelper;
 
 namespace Gim.Revit.Addin.Docs.View
@@ -8,12 +12,86 @@ namespace Gim.Revit.Addin.Docs.View
     public class DocumentationViewModel
         : ANotifyPropertyChangedModel, IDialogContentViewModel
     {
-        public DocumentationViewModel()
+        private string currentDocument = string.Empty;
+
+        public DocumentationViewModel() : this(null) { }
+
+        public DocumentationViewModel(Document document)
         {
+            if (document != null)
+            {
+                currentDocument = Path.GetDirectoryName(document.PathName);
+            }
+
+            libraryRoot = currentDocument;
+            outputDirectory = string.Empty;
+
+            LibraryRootCommand = new RelayCommand(SelectLibraryRoot);
+            OutputDirectoryCommand = new RelayCommand(SelectOutputDirectory);
+
             isJson = true;
             isWeb = false;
             formatJson = true;
             windwosLineEnding = true;
+        }
+
+        private string libraryRoot;
+        public string LibraryRoot
+        {
+            get { return libraryRoot; }
+            set
+            {
+                if (value.Equals(libraryRoot)) { return; }
+
+                if (File.Exists(value))
+                {
+                    value = Path.GetDirectoryName(value);
+                }
+
+                libraryRoot = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string outputDirectory;
+        public string OutputDirectory
+        {
+            get { return outputDirectory; }
+            set
+            {
+                if (value.Equals(outputDirectory)) { return; }
+
+                outputDirectory = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public RelayCommand LibraryRootCommand { get; }
+
+        public RelayCommand OutputDirectoryCommand { get; }
+
+        private void SelectLibraryRoot(object parameter)
+        {
+            LibraryRoot = SelectDirectory(libraryRoot);
+        }
+
+        private void SelectOutputDirectory(object parameter)
+        {
+            OutputDirectory = SelectDirectory(outputDirectory, true);
+        }
+
+        private string SelectDirectory(string currentDirectory, bool newButton = false)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                dialog.SelectedPath = currentDirectory;
+                dialog.ShowNewFolderButton = newButton;
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    currentDirectory = dialog.SelectedPath;
+                }
+            }
+            return currentDirectory;
         }
 
         private bool isJson;
@@ -150,7 +228,6 @@ namespace Gim.Revit.Addin.Docs.View
             }
         }
 
-        public object CommandParameter { get; set; }
 
         public DocumentationSetting Settings
         {
@@ -158,6 +235,8 @@ namespace Gim.Revit.Addin.Docs.View
             {
                 var setting = new DocumentationSetting
                 {
+                    LibraryRoot = LibraryRoot,
+                    OutputDirectory = OutputDirectory,
                     ExportFbx = ExportFbx,
                     DocumentFormat = DocumentFormat,
                     FormatJson = IsJson ? FormatJson : false,
@@ -170,17 +249,32 @@ namespace Gim.Revit.Addin.Docs.View
             }
         }
 
+        public object CommandParameter
+        {
+            get { return currentDocument; }
+            set { }
+        }
+
         public void ExecuteOkay(object parameter) { }
 
         public void ExecuteCancel(object parameter) { }
 
         public bool CanExecute(object parameter)
         {
-            var canExecute = windwosLineEnding || linuxLineEnding;
-            if (IsWeb)
+            var currentPath = parameter as string;
+            var canExecute = (windwosLineEnding || linuxLineEnding);
+                // && DirectoryHelper.IsSameOrSub(LibraryRoot, currentPath);
+            if (canExecute == true)
             {
-                canExecute &= string.IsNullOrEmpty(WebUrl) == false;
-                canExecute &= string.IsNullOrEmpty(ApiKey) == false;
+                if (IsWeb)
+                {
+                    canExecute &= string.IsNullOrEmpty(WebUrl) == false;
+                    canExecute &= string.IsNullOrEmpty(ApiKey) == false;
+                }
+                else if (IsJson)
+                {
+                    canExecute &= Directory.Exists(OutputDirectory);
+                }
             }
             return canExecute;
         }

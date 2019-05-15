@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Directories.cs" />
+    <Compile Include="Helpers\DirectoryHelper.cs" />
     <Compile Include="Helpers\EnvVar.cs" />
     <Compile Include="Helpers\Events\ANotifyPropertyChangedModel.cs" />
     <Compile Include="Helpers\Events\RelayCommand.cs" />
